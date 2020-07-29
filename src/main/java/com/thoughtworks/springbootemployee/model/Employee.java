@@ -1,7 +1,15 @@
 package com.thoughtworks.springbootemployee.model;
 
-import java.math.BigDecimal;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+import java.util.Objects;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Employee {
 
     private int id;
@@ -14,54 +22,16 @@ public class Employee {
 
     private BigDecimal salary;
 
-    public Employee() {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Employee employee = (Employee) o;
+        return id == employee.id;
     }
 
-    public Employee(int id, String name, int age, String gender, BigDecimal salary) {
-        this.id = id;
-        this.name = name;
-        this.age = age;
-        this.gender = gender;
-        this.salary = salary;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public BigDecimal getSalary() {
-        return salary;
-    }
-
-    public void setSalary(BigDecimal salary) {
-        this.salary = salary;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
