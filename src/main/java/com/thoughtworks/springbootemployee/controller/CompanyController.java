@@ -58,9 +58,8 @@ public class CompanyController {
     }
 
     @DeleteMapping("{id}")
-    public String deleteCompany(@PathVariable("id") String id) {
-        //// TODO: 7/29/2020  
-        return DELETE_SUCCESS;
+    public void deleteCompany(@PathVariable("id") int id) throws NoSuchDataException {
+        companyService.deleteCompany(id);
     }
 
 }

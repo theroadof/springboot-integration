@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class CompanyService {
@@ -66,5 +67,13 @@ public class CompanyService {
         }
 
         return companyRepository.save(oldCompany);
+    }
+
+    public void deleteCompany(int companyId) throws NoSuchDataException {
+        Company oldCompany = companyRepository.findById(companyId).orElse(null);
+        if(Objects.isNull(oldCompany)) {
+            throw new NoSuchDataException();
+        }
+        companyRepository.deleteById(companyId);
     }
 }
