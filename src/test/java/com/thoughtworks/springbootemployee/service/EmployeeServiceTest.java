@@ -5,6 +5,7 @@ import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -63,4 +64,15 @@ class EmployeeServiceTest {
         //then
         assertNotNull(employee);
     }
+
+    @Test
+    void should_return_employee_when_createEmployee_given_employee() {
+        //given
+        EmployeeService employService = new EmployeeService(new EmployeeRepository());
+        //when
+        Employee employee = employService.createEmployee(new Employee(11,"tom chen",18,"Male",new BigDecimal(9999)));
+        //then
+        assertNotNull(employee);
+    }
+
 }
