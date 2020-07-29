@@ -18,10 +18,6 @@ public class CompanyController {
     @Autowired
     private CompanyService companyService;
 
-    private static final String ADD_SUCCESS = "Add Success";
-    private static final String UPDATE_SUCCESS = "update success";
-    private static final String DELETE_SUCCESS = "delete success";
-
     @GetMapping(params = {"page", "pageSize"})
     public Page<Company> getCompaniesInPage(@RequestParam(value = "page") Integer page,
                                             @RequestParam(value = "pageSize") Integer pageSize) {

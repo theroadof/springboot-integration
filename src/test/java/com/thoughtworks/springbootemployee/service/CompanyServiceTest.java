@@ -20,7 +20,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static java.util.Arrays.asList;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -117,7 +118,7 @@ public class CompanyServiceTest {
         //given
 
         //when
-        Throwable exception = assertThrows(IllegalOperationException.class, () -> companyService.updateCompany(2,getMockCompany()));
+        Throwable exception = assertThrows(IllegalOperationException.class, () -> companyService.updateCompany(2, getMockCompany()));
 
         //then
         assertEquals(IllegalOperationException.class, exception.getClass());
@@ -128,9 +129,9 @@ public class CompanyServiceTest {
         //given
         when(companyRepository.findById(eq(COMPANY_ID))).thenReturn(Optional.ofNullable(null));
         //when
-        Throwable exception = assertThrows(NoSuchDataException.class,()->companyService.updateCompany(COMPANY_ID,getMockCompany()));
+        Throwable exception = assertThrows(NoSuchDataException.class, () -> companyService.updateCompany(COMPANY_ID, getMockCompany()));
         //then
-        assertEquals(NoSuchDataException.class,exception.getClass());
+        assertEquals(NoSuchDataException.class, exception.getClass());
     }
 
     @Test
@@ -146,11 +147,11 @@ public class CompanyServiceTest {
     @Test
     void should_throw_NoSuchDataException_when_deleteCompany_given_company_no_exists() throws NoSuchDataException {
         //given
-         when(companyRepository.findById(eq(COMPANY_ID))).thenReturn(Optional.ofNullable(null));
+        when(companyRepository.findById(eq(COMPANY_ID))).thenReturn(Optional.ofNullable(null));
         //when
-        Throwable exception = assertThrows(NoSuchDataException.class,()->companyService.deleteCompany(COMPANY_ID));
+        Throwable exception = assertThrows(NoSuchDataException.class, () -> companyService.deleteCompany(COMPANY_ID));
         //then
-        assertEquals(NoSuchDataException.class,exception.getClass());
+        assertEquals(NoSuchDataException.class, exception.getClass());
 
     }
 

@@ -18,10 +18,6 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
-    private static final String ADD_EMPLOYEE_SUCCESS = "add employee success";
-    private static final String UPDATE_EMPLOYEE_SUCCESS = "update employee success";
-    private static final String DELETE_EMPLOYEE_SUCCESS = "delete employee success";
-
     @GetMapping(params = {"page", "pageSize"})
     public Page<Employee> getEmployeePage(@RequestParam(value = "page") Integer page,
                                           @RequestParam(value = "pageSize") Integer pageSize) {
