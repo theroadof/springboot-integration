@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class EmployeeServiceTest {
 
     private static final String MALE = "Male";
+    public static final int EMPLOYEE_ID = 1;
 
     @Test
     void should_return_employees_when_getEmployees_given_() {
@@ -50,5 +51,16 @@ class EmployeeServiceTest {
 
         //then
         assertEquals(2, employees.size());
+    }
+
+    @Test
+    void should_return_employee_when_getEmployee_given_employee_id() {
+        //given
+        EmployeeService employService = new EmployeeService(new EmployeeRepository());
+        //when
+        Employee employee = employService.queryEmployee(EMPLOYEE_ID);
+
+        //then
+        assertNotNull(employee);
     }
 }
