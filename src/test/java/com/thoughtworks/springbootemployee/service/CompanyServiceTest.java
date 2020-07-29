@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @SpringBootTest
 public class CompanyServiceTest {
 
+    private static final int COMPANY_ID = 1;
     @Autowired
     CompanyService companyService;
 
@@ -39,5 +40,16 @@ public class CompanyServiceTest {
         //then
         assertEquals(3,companies.size());
 
+    }
+
+    @Test
+    void should_return_company_when_getCompany_given_company_id() {
+        //given
+
+        //when
+        Company company = companyService.getCompany(COMPANY_ID);
+
+        //then
+        assertNotNull(company);
     }
 }
