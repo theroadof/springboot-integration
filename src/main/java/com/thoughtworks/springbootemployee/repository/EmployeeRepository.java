@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Repository
@@ -55,7 +56,13 @@ public class EmployeeRepository {
         return null;
     }
 
-    public Employee updateEmployee(Employee employee) {
+    public Employee updateEmployee(Employee employeeUpdated) {
+        Employee oldEmployee = employees.stream().filter(employee -> employee.getId()==employeeUpdated.getId()).findFirst().orElse(null);
+        if (Objects.nonNull(oldEmployee)){
+            employees.remove(oldEmployee);
+            employees.add(employeeUpdated);
+            return employeeUpdated;
+        }
         return null;
     }
 }
