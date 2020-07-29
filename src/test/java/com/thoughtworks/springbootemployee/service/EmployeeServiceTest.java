@@ -8,8 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class EmployeeServiceTest {
@@ -75,4 +74,13 @@ class EmployeeServiceTest {
         assertNotNull(employee);
     }
 
+    @Test
+    void should_return_null_when_createEmployee_given_employee_exists() {
+        //given
+        EmployeeService employService = new EmployeeService(new EmployeeRepository());
+        //when
+        Employee employee = employService.createEmployee(new Employee(1,"tom chen",18,"Male",new BigDecimal(9999)));
+        //then
+        assertNull(employee);
+    }
 }
