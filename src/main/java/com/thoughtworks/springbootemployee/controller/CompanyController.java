@@ -46,9 +46,8 @@ public class CompanyController {
     }
 
     @PostMapping
-    public Employee addCompany(@RequestBody Company company) {
-
-        return new Employee();
+    public Company addCompany(@RequestBody Company company) {
+        return companyService.createCompany(company);
     }
 
     @PutMapping("/{id}")

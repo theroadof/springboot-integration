@@ -47,7 +47,7 @@ public class CompanyServiceTest {
         List<Company> companies = companyService.getCompanies();
 
         //then
-        assertEquals(10,companies.size());
+        assertEquals(10, companies.size());
 
     }
 
@@ -59,7 +59,7 @@ public class CompanyServiceTest {
         Page<Company> companies = new PageImpl<Company>(asList());
         when(companyRepository.findAll(isA(PageRequest.class))).thenReturn(companies);
         //when
-        companyService.getCompaniesPage(page,pageSize);
+        companyService.getCompaniesPage(page, pageSize);
         //then
         verify(companyRepository).findAll(isA(PageRequest.class));
     }
@@ -77,14 +77,14 @@ public class CompanyServiceTest {
     }
 
     @Test
-    void should_return_Employees_when_getEmployees_given_company_id()throws NoSuchDataException  {
+    void should_return_Employees_when_getEmployees_given_company_id() throws NoSuchDataException {
         //given
         when(companyRepository.findById(eq(COMPANY_ID))).thenReturn(Optional.of(getMockCompany()));
 
         //when
         List<Employee> employees = companyService.getEmployees(COMPANY_ID);
         //then
-        assertEquals(10,employees.size());
+        assertEquals(10, employees.size());
     }
 
     @Test
@@ -137,6 +137,6 @@ public class CompanyServiceTest {
         employees.add(new Employee(8, "xiaoba", 21, "Female", new BigDecimal(3000)));
         employees.add(new Employee(9, "xiaojiu", 18, "Male", new BigDecimal(3000)));
         employees.add(new Employee(10, "xiaoshi", 18, "Male", new BigDecimal(3000)));
-        return new Company(1,"Mm",10,employees);
+        return new Company(1, "Mm", 10, employees);
     }
 }
