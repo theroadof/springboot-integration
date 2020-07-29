@@ -2,7 +2,10 @@ package com.thoughtworks.springbootemployee.controller;
 
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
+import com.thoughtworks.springbootemployee.service.CompanyService;
 import com.thoughtworks.springbootemployee.utils.PageUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -14,35 +17,37 @@ import java.util.Objects;
 @RequestMapping("/companies")
 public class CompanyController {
 
+    @Autowired
+    private CompanyService companyService;
+
     private static final String ADD_SUCCESS = "Add Success";
     private static final String UPDATE_SUCCESS = "update success";
     private static final String DELETE_SUCCESS = "delete success";
 
+    @GetMapping(params = {"page","pageSize"})
+    public Page<Company> getCompaniesInPage(@RequestParam(value = "page") Integer page,
+                                      @RequestParam(value = "pageSize") Integer pageSize) {
+        return companyService.getCompaniesPage(page, pageSize);
+    }
+
     @GetMapping
-    public List<Company> getCompanies(@RequestParam(value = "page", required = false) Integer page,
-                                      @RequestParam(value = "pageSize", required = false) Integer pageSize) {
-        if (Objects.nonNull(page) && Objects.nonNull(pageSize)) {
-            //// TODO: 7/29/2020  
-            return new PageUtils<Company>().getPage(getCompanyList(), page, pageSize);
-        }
-        return getCompanyList();
+    public List<Company> getCompanies(){
+        return companyService.getCompanies();
     }
 
     @GetMapping("/{id}")
     public Company getCompany(@PathVariable int id) {
-        List<Company> companies = getCompanyList();
-        return companies.stream().filter(company -> company.getId() == id).findFirst().orElse(null);
+        return companyService.getCompany(id);
     }
 
     @GetMapping("/{id}/employees")
     public List<Employee> getEmployeeFromCompany(@PathVariable String id) {
-        Company company = new Company(1, "xxx", 2, getEmployeeList());
-        return company.getEmployees();
+        return null;
     }
 
     @PostMapping
     public String addCompany(@RequestBody Company company) {
-        //// TODO: 7/29/2020  
+
         return ADD_SUCCESS;
     }
 

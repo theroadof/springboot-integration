@@ -2,7 +2,10 @@ package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
+import com.thoughtworks.springbootemployee.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,14 +16,16 @@ public class CompanyService {
     private CompanyRepository companyRepository;
 
     public List<Company> getCompanies() {
-        return companyRepository.getCompanies();
+        return companyRepository.findAll();
     }
 
-    public List<Company> getCompaniesPage(int page, int pageSize) {
-        return companyRepository.getCompaniesPage(page,pageSize);
+    public Page<Company> getCompaniesPage(int page, int pageSize) {
+        return companyRepository.findAll(PageRequest.of(page, pageSize));
     }
 
     public Company getCompany(int id) {
-        return companyRepository.getCompany(id);
+        return companyRepository.findById(id).orElse(null);
     }
+
+
 }

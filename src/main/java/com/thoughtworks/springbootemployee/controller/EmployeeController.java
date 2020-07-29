@@ -13,7 +13,7 @@ import java.util.Objects;
 @RequestMapping("/employees")
 public class EmployeeController {
 
-    @Autowired
+    /*@Autowired
     private EmployeeService employeeService;
 
     private static final String ADD_EMPLOYEE_SUCCESS = "add employee success";
@@ -54,5 +54,5 @@ public class EmployeeController {
         employeeService.deleteEmployee(id);
         return DELETE_EMPLOYEE_SUCCESS;
     }
-
+*/
 }

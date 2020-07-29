@@ -1,2 +1,15 @@
 server:
   port: 7700
+spring:
+  datasource:
+    url: jdbc:h2:file:./h2/test
+    driver-class-name: org.h2.Driver
+  jpa:
+    database: h2
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+  h2:
+    console:
+      path: /h2-console
+      enabled: true
