@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.service;
 
+import com.thoughtworks.springbootemployee.Exception.IllegalOperationException;
 import com.thoughtworks.springbootemployee.Exception.NoSuchDataException;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
@@ -19,8 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static java.util.Arrays.asList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -97,6 +97,40 @@ public class CompanyServiceTest {
 
         //then
         verify(companyRepository).save(any());
+    }
+
+    @Test
+    void should_return_company_when_updateCompany_given_exists_company() throws Exception {
+        //given
+        when(companyRepository.save(any())).thenReturn(getMockCompany());
+        when(companyRepository.findById(COMPANY_ID)).thenReturn(Optional.of(getMockCompany()));
+
+        //when
+        Company companyUpdated = companyService.updateCompany(COMPANY_ID, getMockCompany());
+        //then
+        verify(companyRepository).findById(COMPANY_ID);
+        verify(companyRepository).save(isA(Company.class));
+    }
+
+    @Test
+    void should_throw_ILLEGALECXEPTION_when_updateCompany_given_() throws Exception {
+        //given
+
+        //when
+        Throwable exception = assertThrows(IllegalOperationException.class, () -> companyService.updateCompany(2,getMockCompany()));
+
+        //then
+        assertEquals(IllegalOperationException.class, exception.getClass());
+    }
+
+    @Test
+    void should_throw_NOSUCHDATAEXCEPTION_when_updateCompany_given_() {
+        //given
+        when(companyRepository.findById(eq(COMPANY_ID))).thenReturn(Optional.ofNullable(null));
+        //when
+        Throwable exception = assertThrows(NoSuchDataException.class,()->companyService.updateCompany(COMPANY_ID,getMockCompany()));
+        //then
+        assertEquals(NoSuchDataException.class,exception.getClass());
     }
 
     private List<Company> getMockCompanies() {
