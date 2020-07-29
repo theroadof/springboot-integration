@@ -41,7 +41,7 @@ public class CompanyController {
     }
 
     @GetMapping("/{id}/employees")
-    public List<Employee> getEmployeeFromCompany(@PathVariable String id) {
+    public List<Employee> getEmployeeFromCompany(@PathVariable int id) {
         return null;
     }
 
