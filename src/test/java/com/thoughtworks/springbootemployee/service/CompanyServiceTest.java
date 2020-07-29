@@ -133,6 +133,27 @@ public class CompanyServiceTest {
         assertEquals(NoSuchDataException.class,exception.getClass());
     }
 
+    @Test
+    void should_void_when_deleteCompany_given_company_id() throws NoSuchDataException {
+        //given
+        when(companyRepository.findById(eq(COMPANY_ID))).thenReturn(Optional.ofNullable(getMockCompany()));
+        //when
+        companyService.deleteCompany(COMPANY_ID);
+        //then
+        verify(companyRepository).deleteById(eq(COMPANY_ID));
+    }
+
+    @Test
+    void should_throw_NoSuchDataException_when_deleteCompany_given_company_no_exists() throws NoSuchDataException {
+        //given
+         when(companyRepository.findById(eq(COMPANY_ID))).thenReturn(Optional.ofNullable(null));
+        //when
+        Throwable exception = assertThrows(NoSuchDataException.class,()->companyService.deleteCompany(COMPANY_ID));
+        //then
+        assertEquals(NoSuchDataException.class,exception.getClass());
+
+    }
+
     private List<Company> getMockCompanies() {
         List<Employee> employees = new ArrayList<>();
         employees.add(new Employee(1, "xiaoyi", 18, "Male", new BigDecimal(3000)));
