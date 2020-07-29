@@ -19,4 +19,8 @@ public class CompanyService {
     public List<Company> getCompaniesPage(int page, int pageSize) {
         return companyRepository.getCompaniesPage(page,pageSize);
     }
+
+    public Company getCompany(int id) {
+        return companyRepository.getCompany(id);
+    }
 }

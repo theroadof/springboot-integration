@@ -48,4 +48,8 @@ public class CompanyRepository {
     public List<Company> getCompaniesPage(int page, int pageSize) {
         return new PageUtils<Company>().getPage(companies, page, pageSize);
     }
+
+    public Company getCompany(int id) {
+        return companies.stream().filter(company -> company.getId()==id).findFirst().orElse(null);
+    }
 }
