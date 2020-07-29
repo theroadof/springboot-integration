@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class EmployeeServiceTest {
 
     private static final String MALE = "Male";
-    public static final int EMPLOYEE_ID = 1;
+    private static final int EMPLOYEE_ID = 1;
 
     @Test
     void should_return_employees_when_getEmployees_given_() {
@@ -95,5 +95,18 @@ class EmployeeServiceTest {
 
         //then
         assertNotNull(employeeUpdated);
+    }
+
+    @Test
+    void should_return_employee_when_updateEmployee_given_new_employee() {
+        //given
+        EmployeeService employeeService = new EmployeeService(new EmployeeRepository());
+        Employee employee = new Employee(12, "xiaoshiyi", 18, "Male", new BigDecimal(5000));
+
+        //when
+        Employee employeeUpdated = employeeService.updateEmployee(employee);
+
+        //then
+        assertNull(employeeUpdated);
     }
 }
