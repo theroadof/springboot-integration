@@ -65,4 +65,8 @@ public class EmployeeRepository {
         }
         return null;
     }
+
+    public void deleteEmployee(int id){
+
+    }
 }

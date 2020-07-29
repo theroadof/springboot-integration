@@ -3,12 +3,16 @@ package com.thoughtworks.springbootemployee.service;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.Test;
+import org.mockito.internal.verification.Times;
+import org.mockito.verification.Timeout;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class EmployeeServiceTest {
@@ -108,5 +112,19 @@ class EmployeeServiceTest {
 
         //then
         assertNull(employeeUpdated);
+    }
+
+    @Test
+    void should_void_when_deleteEmployee_given_employee_id() {
+        //given
+        EmployeeRepository mockEmployeeRepository = mock(EmployeeRepository.class);
+        EmployeeService employeeService = new EmployeeService(mockEmployeeRepository);
+
+        //when
+        employeeService.deleteEmployee(EMPLOYEE_ID);
+
+        //then
+        verify(mockEmployeeRepository,times(1)).deleteEmployee(anyInt());
+
     }
 }
