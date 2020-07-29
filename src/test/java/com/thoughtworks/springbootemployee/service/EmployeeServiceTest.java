@@ -11,7 +11,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
-public class EmployeeServiceTest {
+class EmployeeServiceTest {
+
+    private static final String MALE = "Male";
 
     @Test
     void should_return_employees_when_getEmployees_given_() {
@@ -24,5 +26,17 @@ public class EmployeeServiceTest {
         //then
         assertNotNull(employees);
 
+    }
+
+    @Test
+    void should_return_male_employees_when_getEmployees_given_gender_is_male() {
+        //given
+        EmployeeService employService = new EmployeeService(new EmployeeRepository());
+
+        //when
+        List<Employee> employees = employService.queryEmployeesByGender(MALE);
+
+        //then
+        assertNotNull(employees);
     }
 }
