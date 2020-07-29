@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class EmployeeRepository {
@@ -32,4 +33,7 @@ public class EmployeeRepository {
     }
 
 
+    public List<Employee> getEmployeesByGender(String male) {
+        return employees.stream().filter(employee -> employee.getGender().equals(male)).collect(Collectors.toList());
+    }
 }

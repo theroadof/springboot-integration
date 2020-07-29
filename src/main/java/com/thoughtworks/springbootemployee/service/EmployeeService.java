@@ -18,4 +18,8 @@ public class EmployeeService {
     public List<Employee> queryEmployees() {
         return employeeRepository.getEmployees();
     }
+
+    public List<Employee> queryEmployeesByGender(String male) {
+        return employeeRepository.getEmployeesByGender(male);
+    }
 }
