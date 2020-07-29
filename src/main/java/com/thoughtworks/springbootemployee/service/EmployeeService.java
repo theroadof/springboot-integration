@@ -9,12 +9,13 @@ import java.util.List;
 @Service
 public class EmployeeService {
 
+    private EmployeeRepository employeeRepository;
 
     public EmployeeService(EmployeeRepository employeeRepository) {
-
+        this.employeeRepository = employeeRepository;
     }
 
     public List<Employee> queryEmployees() {
-        return null;
+        return employeeRepository.getEmployees();
     }
 }
