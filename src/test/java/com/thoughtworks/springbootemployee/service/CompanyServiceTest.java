@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.service;
 
+import com.thoughtworks.springbootemployee.Exception.NoSuchDataException;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
@@ -20,8 +21,7 @@ import java.util.Optional;
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -77,7 +77,7 @@ public class CompanyServiceTest {
     }
 
     @Test
-    void should_return_Employees_when_getEmployees_given_company_id() {
+    void should_return_Employees_when_getEmployees_given_company_id()throws NoSuchDataException  {
         //given
         when(companyRepository.findById(eq(COMPANY_ID))).thenReturn(Optional.of(getMockCompany()));
 
@@ -85,6 +85,18 @@ public class CompanyServiceTest {
         List<Employee> employees = companyService.getEmployees(COMPANY_ID);
         //then
         assertEquals(10,employees.size());
+    }
+
+    @Test
+    void should_return_employee_when_create_company_given_company() {
+        //given
+        when(companyRepository.save(any())).thenReturn(any());
+
+        //when
+        Company company = companyService.createCompany(getMockCompany());
+
+        //then
+        verify(companyRepository).save(any());
     }
 
     private List<Company> getMockCompanies() {
@@ -125,8 +137,6 @@ public class CompanyServiceTest {
         employees.add(new Employee(8, "xiaoba", 21, "Female", new BigDecimal(3000)));
         employees.add(new Employee(9, "xiaojiu", 18, "Male", new BigDecimal(3000)));
         employees.add(new Employee(10, "xiaoshi", 18, "Male", new BigDecimal(3000)));
-        Company company = new Company(1,"Mm",10,employees);
-
-        return company;
+        return new Company(1,"Mm",10,employees);
     }
 }
