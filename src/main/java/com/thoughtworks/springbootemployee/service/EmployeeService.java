@@ -27,7 +27,7 @@ public class EmployeeService {
     }
 
     public Page<Employee> queryEmployeesByPage(int currentPage, int pageSize) {
-        return employeeRepository.findAll(PageRequest.of(currentPage, pageSize));
+        return employeeRepository.findAll(PageRequest.of(currentPage-1, pageSize));
     }
 
     public Employee queryEmployee(int employeeId) {
