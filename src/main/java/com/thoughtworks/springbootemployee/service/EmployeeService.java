@@ -31,4 +31,7 @@ public class EmployeeService {
         return employeeRepository.getEmployeeById(employeeId);
     }
 
+    public Employee createEmployee(Employee employee) {
+        return employeeRepository.createEmployee(employee);
+    }
 }

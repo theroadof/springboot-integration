@@ -45,4 +45,13 @@ public class EmployeeRepository {
     public Employee getEmployeeById(int employeeId) {
         return employees.stream().filter(employee -> employee.getId() == employeeId).findFirst().orElse(null);
     }
+
+    public Employee createEmployee(Employee employee) {
+        if (!employees.contains(employee)) {
+            employees.add(employee);
+            return employee;
+        }
+
+        return null;
+    }
 }
