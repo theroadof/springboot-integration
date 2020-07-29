@@ -41,4 +41,8 @@ public class EmployeeRepository {
     public List<Employee> getEmployeesByPage(int currentPage, int pageSize) {
         return new PageUtils<Employee>().getPage(employees, currentPage, pageSize);
     }
+
+    public Employee getEmployeeById(int employeeId) {
+        return employees.stream().filter(employee -> employee.getId() == employeeId).findFirst().orElse(null);
+    }
 }

@@ -26,4 +26,9 @@ public class EmployeeService {
     public List<Employee> queryEmployeesByPage(int currentPage, int pageSize) {
         return employeeRepository.getEmployeesByPage(currentPage, pageSize);
     }
+
+    public Employee queryEmployee(int employeeId) {
+        return employeeRepository.getEmployeeById(employeeId);
+    }
+
 }
