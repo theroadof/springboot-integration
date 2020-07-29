@@ -1,6 +1,7 @@
 package com.thoughtworks.springbootemployee.repository;
 
 import com.thoughtworks.springbootemployee.model.Employee;
+import com.thoughtworks.springbootemployee.utils.PageUtils;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -35,5 +36,9 @@ public class EmployeeRepository {
 
     public List<Employee> getEmployeesByGender(String male) {
         return employees.stream().filter(employee -> employee.getGender().equals(male)).collect(Collectors.toList());
+    }
+
+    public List<Employee> getEmployeesByPage(int currentPage, int pageSize) {
+        return new PageUtils<Employee>().getPage(employees, currentPage, pageSize);
     }
 }

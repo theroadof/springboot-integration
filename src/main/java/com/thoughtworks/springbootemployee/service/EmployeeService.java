@@ -22,4 +22,8 @@ public class EmployeeService {
     public List<Employee> queryEmployeesByGender(String male) {
         return employeeRepository.getEmployeesByGender(male);
     }
+
+    public List<Employee> queryEmployeesByPage(int currentPage, int pageSize) {
+        return employeeRepository.getEmployeesByPage(currentPage, pageSize);
+    }
 }
