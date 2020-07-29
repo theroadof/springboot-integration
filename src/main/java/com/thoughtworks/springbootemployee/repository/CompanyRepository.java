@@ -2,6 +2,7 @@ package com.thoughtworks.springbootemployee.repository;
 
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
+import com.thoughtworks.springbootemployee.utils.PageUtils;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -27,16 +28,16 @@ public class CompanyRepository {
         employees.add(new Employee(9, "xiaojiu", 18, "Male", new BigDecimal(3000)));
         employees.add(new Employee(10, "xiaoshi", 18, "Male", new BigDecimal(3000)));
         companies = new ArrayList<>();
-        companies.add(new Company(1,"Mm",10,employees));
-        companies.add(new Company(2,"Aa",10,employees));
-        companies.add(new Company(3,"Bb",10,employees));
-        companies.add(new Company(4,"Cc",10,employees));
-        companies.add(new Company(5,"Dd",10,employees));
-        companies.add(new Company(6,"Ff",10,employees));
-        companies.add(new Company(7,"Gg",10,employees));
-        companies.add(new Company(8,"Ll",10,employees));
-        companies.add(new Company(9,"Pp",10,employees));
-        companies.add(new Company(10,"Uu",10,employees));
+        companies.add(new Company(1, "Mm", 10, employees));
+        companies.add(new Company(2, "Aa", 10, employees));
+        companies.add(new Company(3, "Bb", 10, employees));
+        companies.add(new Company(4, "Cc", 10, employees));
+        companies.add(new Company(5, "Dd", 10, employees));
+        companies.add(new Company(6, "Ff", 10, employees));
+        companies.add(new Company(7, "Gg", 10, employees));
+        companies.add(new Company(8, "Ll", 10, employees));
+        companies.add(new Company(9, "Pp", 10, employees));
+        companies.add(new Company(10, "Uu", 10, employees));
     }
 
 
@@ -45,6 +46,6 @@ public class CompanyRepository {
     }
 
     public List<Company> getCompaniesPage(int page, int pageSize) {
-        return new ArrayList<>();
+        return new PageUtils<Company>().getPage(companies, page, pageSize);
     }
 }
