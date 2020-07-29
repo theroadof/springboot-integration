@@ -5,15 +5,11 @@ import com.thoughtworks.springbootemployee.Exception.NoSuchDataException;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.service.CompanyService;
-import com.thoughtworks.springbootemployee.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/companies")
@@ -26,14 +22,14 @@ public class CompanyController {
     private static final String UPDATE_SUCCESS = "update success";
     private static final String DELETE_SUCCESS = "delete success";
 
-    @GetMapping(params = {"page","pageSize"})
+    @GetMapping(params = {"page", "pageSize"})
     public Page<Company> getCompaniesInPage(@RequestParam(value = "page") Integer page,
-                                      @RequestParam(value = "pageSize") Integer pageSize) {
+                                            @RequestParam(value = "pageSize") Integer pageSize) {
         return companyService.getCompaniesPage(page, pageSize);
     }
 
     @GetMapping
-    public List<Company> getCompanies(){
+    public List<Company> getCompanies() {
         return companyService.getCompanies();
     }
 
@@ -53,8 +49,8 @@ public class CompanyController {
     }
 
     @PutMapping("/{id}")
-    public Company updateCompany(@PathVariable("id") int id,@RequestBody Company company) throws NoSuchDataException, IllegalOperationException {
-        return companyService.updateCompany(id,company);
+    public Company updateCompany(@PathVariable("id") int id, @RequestBody Company company) throws NoSuchDataException, IllegalOperationException {
+        return companyService.updateCompany(id, company);
     }
 
     @DeleteMapping("{id}")

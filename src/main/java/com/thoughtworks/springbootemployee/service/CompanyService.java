@@ -5,7 +5,6 @@ import com.thoughtworks.springbootemployee.Exception.NoSuchDataException;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
-import com.thoughtworks.springbootemployee.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -71,7 +70,7 @@ public class CompanyService {
 
     public void deleteCompany(int companyId) throws NoSuchDataException {
         Company oldCompany = companyRepository.findById(companyId).orElse(null);
-        if(Objects.isNull(oldCompany)) {
+        if (Objects.isNull(oldCompany)) {
             throw new NoSuchDataException();
         }
         companyRepository.deleteById(companyId);
