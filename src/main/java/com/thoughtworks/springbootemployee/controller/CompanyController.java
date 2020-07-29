@@ -42,13 +42,13 @@ public class CompanyController {
 
     @GetMapping("/{id}/employees")
     public List<Employee> getEmployeeFromCompany(@PathVariable int id) {
-        return null;
+        return companyService.getCompany(id).getEmployees();
     }
 
     @PostMapping
-    public String addCompany(@RequestBody Company company) {
+    public Employee addCompany(@RequestBody Company company) {
 
-        return ADD_SUCCESS;
+        return new Employee();
     }
 
     @PutMapping("/{id}")
