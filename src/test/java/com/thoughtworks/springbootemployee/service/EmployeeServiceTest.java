@@ -125,6 +125,5 @@ class EmployeeServiceTest {
 
         //then
         verify(mockEmployeeRepository,times(1)).deleteEmployee(anyInt());
-
     }
 }

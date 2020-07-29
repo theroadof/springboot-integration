@@ -52,7 +52,6 @@ public class EmployeeRepository {
             employees.add(employee);
             return employee;
         }
-
         return null;
     }
 
@@ -67,6 +66,9 @@ public class EmployeeRepository {
     }
 
     public void deleteEmployee(int id){
-
+        Employee oldEmployee = employees.stream().filter(employee -> employee.getId()==id).findFirst().orElse(null);
+        if(Objects.nonNull(oldEmployee)) {
+            employees.remove(oldEmployee);
+        }
     }
 }
