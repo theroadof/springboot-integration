@@ -1,5 +1,7 @@
 package com.thoughtworks.springbootemployee.controller;
 
+import com.thoughtworks.springbootemployee.Exception.IllegalOperationException;
+import com.thoughtworks.springbootemployee.Exception.NoSuchDataException;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.service.CompanyService;
@@ -51,31 +53,14 @@ public class CompanyController {
     }
 
     @PutMapping("/{id}")
-    public String updateCompany(@PathVariable("id") String id) {
-        //// TODO: 7/29/2020
-        return UPDATE_SUCCESS;
+    public Company updateCompany(@PathVariable("id") int id,@RequestBody Company company) throws NoSuchDataException, IllegalOperationException {
+        return companyService.updateCompany(id,company);
     }
 
     @DeleteMapping("{id}")
     public String deleteCompany(@PathVariable("id") String id) {
         //// TODO: 7/29/2020  
         return DELETE_SUCCESS;
-    }
-
-    private List<Company> getCompanyList() {
-        List<Company> companies = new ArrayList<>();
-        companies.add(new Company(1, "a", 0, getEmployeeList()));
-        companies.add(new Company(2, "b", 0, getEmployeeList()));
-        companies.add(new Company(3, "c", 0, getEmployeeList()));
-        companies.add(new Company(4, "d", 0, getEmployeeList()));
-        return companies;
-    }
-
-    private List<Employee> getEmployeeList() {
-        List<Employee> employees = new ArrayList<>();
-        employees.add(new Employee(1, "q", 18, "male", new BigDecimal(3000)));
-        employees.add(new Employee(2, "w", 18, "male", new BigDecimal(3000)));
-        return employees;
     }
 
 }

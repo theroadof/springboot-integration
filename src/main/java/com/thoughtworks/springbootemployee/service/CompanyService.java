@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.service;
 
+import com.thoughtworks.springbootemployee.Exception.IllegalOperationException;
 import com.thoughtworks.springbootemployee.Exception.NoSuchDataException;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
@@ -40,5 +41,30 @@ public class CompanyService {
 
     public Company createCompany(Company company) {
         return companyRepository.save(company);
+    }
+
+    public Company updateCompany(int companyId, Company company) throws IllegalOperationException, NoSuchDataException {
+        if (companyId != company.getId()) {
+            throw new IllegalOperationException();
+        }
+
+        Company oldCompany = companyRepository.findById(companyId).orElse(null);
+        if (oldCompany == null) {
+            throw new NoSuchDataException();
+        }
+
+        if (company.getCompanyName() != null) {
+            oldCompany.setCompanyName(company.getCompanyName());
+        }
+
+        if (company.getEmployeeNumber() > 0) {
+            oldCompany.setEmployeeNumber(company.getEmployeeNumber());
+        }
+
+        if (company.getEmployees().size() > 0) {
+            oldCompany.setEmployees(company.getEmployees());
+        }
+
+        return companyRepository.save(oldCompany);
     }
 }
