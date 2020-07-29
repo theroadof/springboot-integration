@@ -22,7 +22,8 @@ public class CompanyController {
     public List<Company> getCompanies(@RequestParam(value = "page", required = false) Integer page,
                                       @RequestParam(value = "pageSize", required = false) Integer pageSize) {
         if (Objects.nonNull(page) && Objects.nonNull(pageSize)) {
-            return (List<Company>) PageUtils.getPage(getCompanyList(), page, pageSize);
+            //// TODO: 7/29/2020  
+            return new PageUtils<Company>().getPage(getCompanyList(), page, pageSize);
         }
         return getCompanyList();
     }
@@ -41,16 +42,19 @@ public class CompanyController {
 
     @PostMapping
     public String addCompany(@RequestBody Company company) {
+        //// TODO: 7/29/2020  
         return ADD_SUCCESS;
     }
 
     @PutMapping("/{id}")
     public String updateCompany(@PathVariable("id") String id) {
+        //// TODO: 7/29/2020
         return UPDATE_SUCCESS;
     }
 
     @DeleteMapping("{id}")
     public String deleteCompany(@PathVariable("id") String id) {
+        //// TODO: 7/29/2020  
         return DELETE_SUCCESS;
     }
 
