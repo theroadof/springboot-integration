@@ -69,7 +69,7 @@ class EmployeeServiceTest {
         //given
         EmployeeService employService = new EmployeeService(new EmployeeRepository());
         //when
-        Employee employee = employService.createEmployee(new Employee(11,"tom chen",18,"Male",new BigDecimal(9999)));
+        Employee employee = employService.createEmployee(new Employee(11, "tom chen", 18, "Male", new BigDecimal(9999)));
         //then
         assertNotNull(employee);
     }
@@ -79,8 +79,21 @@ class EmployeeServiceTest {
         //given
         EmployeeService employService = new EmployeeService(new EmployeeRepository());
         //when
-        Employee employee = employService.createEmployee(new Employee(1,"tom chen",18,"Male",new BigDecimal(9999)));
+        Employee employee = employService.createEmployee(new Employee(1, "tom chen", 18, "Male", new BigDecimal(9999)));
         //then
         assertNull(employee);
+    }
+
+    @Test
+    void should_return_employee_when_updateEmployee_given_exists_employee() {
+        //given
+        EmployeeService employeeService = new EmployeeService(new EmployeeRepository());
+        Employee employee = new Employee(1, "xiaoshiyi", 18, "Male", new BigDecimal(5000));
+
+        //when
+        Employee employeeUpdated = employeeService.updateEmployee(employee);
+
+        //then
+        assertNotNull(employeeUpdated);
     }
 }

@@ -54,4 +54,8 @@ public class EmployeeRepository {
 
         return null;
     }
+
+    public Employee updateEmployee(Employee employee) {
+        return null;
+    }
 }
