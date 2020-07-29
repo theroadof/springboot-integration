@@ -1,7 +1,14 @@
 package com.thoughtworks.springbootemployee.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Company {
 
     private int id;
@@ -11,51 +18,5 @@ public class Company {
     private int employeeNumber;
 
     private List<Employee> employees;
-
-    public Company(int id, String companyName, int employeeNumber, List<Employee> employees) {
-        this.id = id;
-        this.companyName = companyName;
-        this.employeeNumber = employeeNumber;
-        this.employees = employees;
-    }
-
-    public Company(int id, String companyName) {
-        this.id = id;
-        this.companyName = companyName;
-    }
-
-    public Company() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
-    public int getEmployeeNumber() {
-        return employeeNumber;
-    }
-
-    public void setEmployeeNumber(int employeeNumber) {
-        this.employeeNumber = employeeNumber;
-    }
-
-    public List<Employee> getEmployees() {
-        return employees;
-    }
-
-    public void setEmployees(List<Employee> employees) {
-        this.employees = employees;
-    }
+    
 }
