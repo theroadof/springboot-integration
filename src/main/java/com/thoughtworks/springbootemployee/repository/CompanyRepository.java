@@ -43,4 +43,8 @@ public class CompanyRepository {
     public List<Company> getCompanies() {
         return companies;
     }
+
+    public List<Company> getCompaniesPage(int page, int pageSize) {
+        return new ArrayList<>();
+    }
 }
