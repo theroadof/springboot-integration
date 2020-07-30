@@ -6,19 +6,13 @@ import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.web.JsonPath;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Collections;
 
 import static java.util.Collections.emptyList;
 import static org.hamcrest.Matchers.hasSize;
@@ -52,7 +46,7 @@ public class EmployeeControllerIntegrationTest {
         employeeRepository.save(new Employee(2, "xiaowang", 18, "Male", new BigDecimal(3000), 1));
         //when
         mockMvc.perform(get("/employees").contentType(MediaType.APPLICATION_JSON)
-                .param("page","1").param("pageSize","1"))
+                .param("page", "1").param("pageSize", "1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content", hasSize(1)))
                 .andExpect(jsonPath("$.content[0].id").value(1));
@@ -74,5 +68,18 @@ public class EmployeeControllerIntegrationTest {
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].id").isNumber())
                 .andExpect(jsonPath("$[0].gender").value("male"));
+    }
+
+    @Test
+    void should_return_employees_when_getEmployees_given_employees() throws Exception {
+        //given
+        companyRepository.save(new Company(1, "oocl", 1, emptyList()));
+        employeeRepository.save(new Employee(1, "Devin", 22, "male", new BigDecimal(9999), 1));
+        employeeRepository.save(new Employee(2, "xiaohong", 22, "female", new BigDecimal(9999), 1));
+
+        //when
+        mockMvc.perform(get("/employees").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)));
     }
 }
