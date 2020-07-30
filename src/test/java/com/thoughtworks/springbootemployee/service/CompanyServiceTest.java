@@ -1,7 +1,7 @@
 package com.thoughtworks.springbootemployee.service;
 
-import com.thoughtworks.springbootemployee.Exception.IllegalOperationException;
-import com.thoughtworks.springbootemployee.Exception.NoSuchDataException;
+import com.thoughtworks.springbootemployee.Exception.IllegalUpdateCompanyException;
+import com.thoughtworks.springbootemployee.Exception.NoSuchCompanyException;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
@@ -76,7 +76,7 @@ class CompanyServiceTest {
     }
 
     @Test
-    void should_return_Employees_when_getEmployees_given_company_id() throws NoSuchDataException {
+    void should_return_Employees_when_getEmployees_given_company_id() {
         //given
         when(companyRepository.findById(eq(COMPANY_ID))).thenReturn(Optional.of(getMockCompany()));
 
@@ -116,11 +116,11 @@ class CompanyServiceTest {
         //given
 
         //when
-        Throwable exception = assertThrows(IllegalOperationException.class,
+        Throwable exception = assertThrows(IllegalUpdateCompanyException.class,
                 () -> companyService.updateCompany(2, getMockCompany()));
 
         //then
-        assertEquals(IllegalOperationException.class, exception.getClass());
+        assertEquals(ExceptionMessage.ILLEGAL_UPDATE_COMPANY.getErrorMsg(), exception.getMessage());
     }
 
     @Test
@@ -128,13 +128,13 @@ class CompanyServiceTest {
         //given
         when(companyRepository.findById(eq(COMPANY_ID))).thenReturn(Optional.empty());
         //when
-        Throwable exception = assertThrows(NoSuchDataException.class, () -> companyService.updateCompany(COMPANY_ID, getMockCompany()));
+        Throwable exception = assertThrows(NoSuchCompanyException.class, () -> companyService.updateCompany(COMPANY_ID, getMockCompany()));
         //then
-        assertEquals(ExceptionMessage.NO_SUCH_DATA.getErrorMsg(), exception.getMessage());
+        assertEquals(ExceptionMessage.NO_SUCH_COMPANY.getErrorMsg(), exception.getMessage());
     }
 
     @Test
-    void should_void_when_deleteCompany_given_company_id() throws NoSuchDataException {
+    void should_void_when_deleteCompany_given_company_id() {
         //given
         when(companyRepository.findById(eq(COMPANY_ID))).thenReturn(Optional.of(getMockCompany()));
         //when
@@ -144,28 +144,28 @@ class CompanyServiceTest {
     }
 
     @Test
-    void should_throw_NoSuchDataException_when_deleteCompany_given_company_no_exists() throws NoSuchDataException {
+    void should_throw_NoSuchDataException_when_deleteCompany_given_company_no_exists() {
         //given
         when(companyRepository.findById(eq(COMPANY_ID))).thenReturn(Optional.empty());
         //when
-        Throwable exception = assertThrows(NoSuchDataException.class, () -> companyService.deleteCompany(COMPANY_ID));
+        Throwable exception = assertThrows(NoSuchCompanyException.class, () -> companyService.deleteCompany(COMPANY_ID));
         //then
-        assertEquals(NoSuchDataException.class, exception.getClass());
+        assertEquals(ExceptionMessage.NO_SUCH_COMPANY.getErrorMsg(), exception.getMessage());
 
     }
 
     private List<Company> getMockCompanies() {
         List<Employee> employees = new ArrayList<>();
-        employees.add(new Employee(1, "xiaoyi", 18, "Male", new BigDecimal(3000)));
-        employees.add(new Employee(2, "xiaoer", 18, "Male", new BigDecimal(3000)));
-        employees.add(new Employee(3, "xiaosan", 19, "Male", new BigDecimal(3000)));
-        employees.add(new Employee(4, "xiaosi", 19, "Male", new BigDecimal(3000)));
-        employees.add(new Employee(5, "xiaowu", 20, "Male", new BigDecimal(3000)));
-        employees.add(new Employee(6, "xiaoliu", 20, "Female", new BigDecimal(3000)));
-        employees.add(new Employee(7, "xiaoqi", 21, "Female", new BigDecimal(3000)));
-        employees.add(new Employee(8, "xiaoba", 21, "Female", new BigDecimal(3000)));
-        employees.add(new Employee(9, "xiaojiu", 18, "Male", new BigDecimal(3000)));
-        employees.add(new Employee(10, "xiaoshi", 18, "Male", new BigDecimal(3000)));
+        employees.add(new Employee(1, "xiaoyi", 18, "Male", new BigDecimal(3000), 1));
+        employees.add(new Employee(2, "xiaoer", 18, "Male", new BigDecimal(3000), 1));
+        employees.add(new Employee(3, "xiaosan", 19, "Male", new BigDecimal(3000), 1));
+        employees.add(new Employee(4, "xiaosi", 19, "Male", new BigDecimal(3000), 1));
+        employees.add(new Employee(5, "xiaowu", 20, "Male", new BigDecimal(3000), 1));
+        employees.add(new Employee(6, "xiaoliu", 20, "Female", new BigDecimal(3000), 1));
+        employees.add(new Employee(7, "xiaoqi", 21, "Female", new BigDecimal(3000), 1));
+        employees.add(new Employee(8, "xiaoba", 21, "Female", new BigDecimal(3000), 1));
+        employees.add(new Employee(9, "xiaojiu", 18, "Male", new BigDecimal(3000), 1));
+        employees.add(new Employee(10, "xiaoshi", 18, "Male", new BigDecimal(3000), 1));
         List<Company> companies = new ArrayList<>();
         companies.add(new Company(1, "Mm", 10, employees));
         companies.add(new Company(2, "Aa", 10, employees));
@@ -182,16 +182,16 @@ class CompanyServiceTest {
 
     private Company getMockCompany() {
         List<Employee> employees = new ArrayList<>();
-        employees.add(new Employee(1, "xiaoyi", 18, "Male", new BigDecimal(3000)));
-        employees.add(new Employee(2, "xiaoer", 18, "Male", new BigDecimal(3000)));
-        employees.add(new Employee(3, "xiaosan", 19, "Male", new BigDecimal(3000)));
-        employees.add(new Employee(4, "xiaosi", 19, "Male", new BigDecimal(3000)));
-        employees.add(new Employee(5, "xiaowu", 20, "Male", new BigDecimal(3000)));
-        employees.add(new Employee(6, "xiaoliu", 20, "Female", new BigDecimal(3000)));
-        employees.add(new Employee(7, "xiaoqi", 21, "Female", new BigDecimal(3000)));
-        employees.add(new Employee(8, "xiaoba", 21, "Female", new BigDecimal(3000)));
-        employees.add(new Employee(9, "xiaojiu", 18, "Male", new BigDecimal(3000)));
-        employees.add(new Employee(10, "xiaoshi", 18, "Male", new BigDecimal(3000)));
+        employees.add(new Employee(1, "xiaoyi", 18, "Male", new BigDecimal(3000), 1));
+        employees.add(new Employee(2, "xiaoer", 18, "Male", new BigDecimal(3000), 1));
+        employees.add(new Employee(3, "xiaosan", 19, "Male", new BigDecimal(3000), 1));
+        employees.add(new Employee(4, "xiaosi", 19, "Male", new BigDecimal(3000), 1));
+        employees.add(new Employee(5, "xiaowu", 20, "Male", new BigDecimal(3000), 1));
+        employees.add(new Employee(6, "xiaoliu", 20, "Female", new BigDecimal(3000), 1));
+        employees.add(new Employee(7, "xiaoqi", 21, "Female", new BigDecimal(3000), 1));
+        employees.add(new Employee(8, "xiaoba", 21, "Female", new BigDecimal(3000), 1));
+        employees.add(new Employee(9, "xiaojiu", 18, "Male", new BigDecimal(3000), 1));
+        employees.add(new Employee(10, "xiaoshi", 18, "Male", new BigDecimal(3000), 1));
         return new Company(1, "Mm", 10, employees);
     }
 }

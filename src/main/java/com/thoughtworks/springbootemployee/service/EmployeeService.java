@@ -1,7 +1,7 @@
 package com.thoughtworks.springbootemployee.service;
 
-import com.thoughtworks.springbootemployee.Exception.IllegalOperationException;
-import com.thoughtworks.springbootemployee.Exception.NoSuchDataException;
+import com.thoughtworks.springbootemployee.Exception.IllegalUpdateEmployeeException;
+import com.thoughtworks.springbootemployee.Exception.NoSuchEmployeeException;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
@@ -39,13 +39,13 @@ public class EmployeeService {
         return employeeRepository.save(employee);
     }
 
-    public Employee updateEmployee(Integer id, Employee employee) throws IllegalOperationException, NoSuchDataException {
+    public Employee updateEmployee(Integer id, Employee employee){
         if (!id.equals(employee.getId())) {
-            throw new IllegalOperationException(ExceptionMessage.ILLEGALOPRATION.getErrorMsg());
+            throw new IllegalUpdateEmployeeException(ExceptionMessage.ILLEGAL_UPDATE_EMPLOYEE.getErrorMsg());
         }
         Employee oldEmployee = employeeRepository.findById(id).orElse(null);
         if (oldEmployee == null) {
-            throw new NoSuchDataException(ExceptionMessage.NO_SUCH_DATA.getErrorMsg());
+            throw new NoSuchEmployeeException(ExceptionMessage.NO_SUCH_EMPLOYEE.getErrorMsg());
         }
         if (employee.getName() != null) {
             oldEmployee.setName(employee.getName());
@@ -62,13 +62,12 @@ public class EmployeeService {
         return employeeRepository.save(oldEmployee);
     }
 
-    public void deleteEmployee(int employeeId) throws NoSuchDataException {
+    public void deleteEmployee(int employeeId){
         Employee employee = employeeRepository.findById(employeeId).orElse(null);
         if (employee == null) {
-            throw new NoSuchDataException(ExceptionMessage.NO_SUCH_DATA.getErrorMsg());
+            throw new NoSuchEmployeeException(ExceptionMessage.NO_SUCH_EMPLOYEE .getErrorMsg());
         }
         employeeRepository.deleteById(employeeId);
     }
-
 
 }

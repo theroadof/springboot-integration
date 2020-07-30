@@ -1,7 +1,7 @@
 package com.thoughtworks.springbootemployee.service;
 
-import com.thoughtworks.springbootemployee.Exception.IllegalOperationException;
-import com.thoughtworks.springbootemployee.Exception.NoSuchDataException;
+import com.thoughtworks.springbootemployee.Exception.IllegalUpdateCompanyException;
+import com.thoughtworks.springbootemployee.Exception.NoSuchCompanyException;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
@@ -32,10 +32,10 @@ public class CompanyService {
     }
 
 
-    public List<Employee> getEmployees(int companyId) throws NoSuchDataException {
+    public List<Employee> getEmployees(int companyId){
         Company company = companyRepository.findById(companyId).orElse(null);
         if (company == null) {
-            throw new NoSuchDataException(ExceptionMessage.NO_SUCH_DATA.getErrorMsg());
+            throw new NoSuchCompanyException(ExceptionMessage.NO_SUCH_EMPLOYEE.getErrorMsg());
         }
         return company.getEmployees();
     }
@@ -44,14 +44,14 @@ public class CompanyService {
         return companyRepository.save(company);
     }
 
-    public Company updateCompany(int companyId, Company company) throws IllegalOperationException, NoSuchDataException {
+    public Company updateCompany(int companyId, Company company){
         if (companyId != company.getId()) {
-            throw new IllegalOperationException(ExceptionMessage.ILLEGALOPRATION.getErrorMsg());
+            throw new IllegalUpdateCompanyException(ExceptionMessage.ILLEGAL_UPDATE_COMPANY.getErrorMsg());
         }
 
         Company oldCompany = companyRepository.findById(companyId).orElse(null);
         if (oldCompany == null) {
-            throw new NoSuchDataException(ExceptionMessage.NO_SUCH_DATA.getErrorMsg());
+            throw new NoSuchCompanyException(ExceptionMessage.NO_SUCH_COMPANY.getErrorMsg());
         }
 
         if (company.getCompanyName() != null) {
@@ -69,10 +69,10 @@ public class CompanyService {
         return companyRepository.save(oldCompany);
     }
 
-    public void deleteCompany(int companyId) throws NoSuchDataException {
+    public void deleteCompany(int companyId){
         Company oldCompany = companyRepository.findById(companyId).orElse(null);
         if (Objects.isNull(oldCompany)) {
-            throw new NoSuchDataException(ExceptionMessage.NO_SUCH_DATA.getErrorMsg());
+            throw new NoSuchCompanyException(ExceptionMessage.NO_SUCH_COMPANY.getErrorMsg());
         }
         companyRepository.deleteById(companyId);
     }

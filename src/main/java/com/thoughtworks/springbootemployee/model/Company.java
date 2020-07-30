@@ -1,14 +1,13 @@
 package com.thoughtworks.springbootemployee.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "company")
@@ -16,7 +15,7 @@ public class Company {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private int id;
 
     @Column(name = "companyName")
     private String companyName;
@@ -24,7 +23,7 @@ public class Company {
     @Column(name = "employNumber")
     private int employeeNumber;
 
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.ALL},mappedBy = "companyId")
     private List<Employee> employees;
 
 }

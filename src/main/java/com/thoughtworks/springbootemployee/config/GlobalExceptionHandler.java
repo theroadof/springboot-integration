@@ -1,28 +1,34 @@
 package com.thoughtworks.springbootemployee.config;
 
-import com.thoughtworks.springbootemployee.Exception.IllegalOperationException;
-import com.thoughtworks.springbootemployee.Exception.NoSuchDataException;
+import com.thoughtworks.springbootemployee.Exception.*;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(NoSuchDataException.class)
-    @ResponseBody
+    @ExceptionHandler(NoSuchEmployeeException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     String handleNoSuchDataException() {
-        return ExceptionMessage.NO_SUCH_DATA.getErrorMsg();
+        return ExceptionMessage.NO_SUCH_EMPLOYEE.getErrorMsg();
     }
 
-    @ExceptionHandler(IllegalOperationException.class)
-    @ResponseBody
+    @ExceptionHandler(NoSuchCompanyException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     String handleIllegalOperationException() {
-        return ExceptionMessage.ILLEGALOPRATION.getErrorMsg();
+        return ExceptionMessage.NO_SUCH_COMPANY.getErrorMsg();
+    }
+
+    @ExceptionHandler(IllegalUpdateEmployeeException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    String handleIllegalUpdateEmployeeException() {
+        return ExceptionMessage.ILLEGAL_UPDATE_EMPLOYEE.getErrorMsg();
+    }
+
+    @ExceptionHandler(IllegalUpdateCompanyException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    String handleIllegalUpdateCompanyException() {
+        return ExceptionMessage.ILLEGAL_UPDATE_COMPANY.getErrorMsg();
     }
 }

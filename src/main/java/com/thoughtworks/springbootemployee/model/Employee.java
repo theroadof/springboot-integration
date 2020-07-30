@@ -1,14 +1,13 @@
 package com.thoughtworks.springbootemployee.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "employee")
@@ -16,7 +15,7 @@ public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private int id;
 
     private String name;
 
@@ -26,4 +25,5 @@ public class Employee {
 
     private BigDecimal salary;
 
+    private int companyId;
 }

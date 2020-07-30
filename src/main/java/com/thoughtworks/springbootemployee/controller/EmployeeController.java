@@ -1,7 +1,5 @@
 package com.thoughtworks.springbootemployee.controller;
 
-import com.thoughtworks.springbootemployee.Exception.IllegalOperationException;
-import com.thoughtworks.springbootemployee.Exception.NoSuchDataException;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,12 +44,12 @@ public class EmployeeController {
     }
 
     @PutMapping("/{id}")
-    public Employee updateEmployee(@PathVariable("id") int id, @RequestBody Employee employee) throws NoSuchDataException, IllegalOperationException {
+    public Employee updateEmployee(@PathVariable("id") int id, @RequestBody Employee employee) {
         return employeeService.updateEmployee(id, employee);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteEmployee(@PathVariable("id") int id) throws NoSuchDataException {
+    public void deleteEmployee(@PathVariable("id") int id) {
         employeeService.deleteEmployee(id);
     }
 
