@@ -2,6 +2,7 @@ package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.Exception.IllegalOperationException;
 import com.thoughtworks.springbootemployee.Exception.NoSuchDataException;
+import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
@@ -115,7 +116,8 @@ class CompanyServiceTest {
         //given
 
         //when
-        Throwable exception = assertThrows(IllegalOperationException.class, () -> companyService.updateCompany(2, getMockCompany()));
+        Throwable exception = assertThrows(IllegalOperationException.class,
+                () -> companyService.updateCompany(2, getMockCompany()));
 
         //then
         assertEquals(IllegalOperationException.class, exception.getClass());
@@ -128,7 +130,7 @@ class CompanyServiceTest {
         //when
         Throwable exception = assertThrows(NoSuchDataException.class, () -> companyService.updateCompany(COMPANY_ID, getMockCompany()));
         //then
-        assertEquals(NoSuchDataException.class, exception.getClass());
+        assertEquals(ExceptionMessage.NO_SUCH_DATA.getErrorMsg(), exception.getMessage());
     }
 
     @Test

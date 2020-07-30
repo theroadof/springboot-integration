@@ -2,6 +2,7 @@ package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.Exception.IllegalOperationException;
 import com.thoughtworks.springbootemployee.Exception.NoSuchDataException;
+import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
@@ -34,7 +35,7 @@ public class CompanyService {
     public List<Employee> getEmployees(int companyId) throws NoSuchDataException {
         Company company = companyRepository.findById(companyId).orElse(null);
         if (company == null) {
-            throw new NoSuchDataException();
+            throw new NoSuchDataException(ExceptionMessage.NO_SUCH_DATA.getErrorMsg());
         }
         return company.getEmployees();
     }
@@ -45,12 +46,12 @@ public class CompanyService {
 
     public Company updateCompany(int companyId, Company company) throws IllegalOperationException, NoSuchDataException {
         if (companyId != company.getId()) {
-            throw new IllegalOperationException();
+            throw new IllegalOperationException(ExceptionMessage.ILLEGALOPRATION.getErrorMsg());
         }
 
         Company oldCompany = companyRepository.findById(companyId).orElse(null);
         if (oldCompany == null) {
-            throw new NoSuchDataException();
+            throw new NoSuchDataException(ExceptionMessage.NO_SUCH_DATA.getErrorMsg());
         }
 
         if (company.getCompanyName() != null) {
@@ -71,7 +72,7 @@ public class CompanyService {
     public void deleteCompany(int companyId) throws NoSuchDataException {
         Company oldCompany = companyRepository.findById(companyId).orElse(null);
         if (Objects.isNull(oldCompany)) {
-            throw new NoSuchDataException();
+            throw new NoSuchDataException(ExceptionMessage.NO_SUCH_DATA.getErrorMsg());
         }
         companyRepository.deleteById(companyId);
     }

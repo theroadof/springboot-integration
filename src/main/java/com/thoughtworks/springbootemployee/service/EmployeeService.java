@@ -2,6 +2,7 @@ package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.Exception.IllegalOperationException;
 import com.thoughtworks.springbootemployee.Exception.NoSuchDataException;
+import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,11 +41,11 @@ public class EmployeeService {
 
     public Employee updateEmployee(Integer id, Employee employee) throws IllegalOperationException, NoSuchDataException {
         if (!id.equals(employee.getId())) {
-            throw new IllegalOperationException();
+            throw new IllegalOperationException(ExceptionMessage.ILLEGALOPRATION.getErrorMsg());
         }
         Employee oldEmployee = employeeRepository.findById(id).orElse(null);
         if (oldEmployee == null) {
-            throw new NoSuchDataException();
+            throw new NoSuchDataException(ExceptionMessage.NO_SUCH_DATA.getErrorMsg());
         }
         if (employee.getName() != null) {
             oldEmployee.setName(employee.getName());
@@ -64,7 +65,7 @@ public class EmployeeService {
     public void deleteEmployee(int employeeId) throws NoSuchDataException {
         Employee employee = employeeRepository.findById(employeeId).orElse(null);
         if (employee == null) {
-            throw new NoSuchDataException();
+            throw new NoSuchDataException(ExceptionMessage.NO_SUCH_DATA.getErrorMsg());
         }
         employeeRepository.deleteById(employeeId);
     }
