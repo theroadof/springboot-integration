@@ -15,10 +15,10 @@ import org.springframework.data.domain.PageRequest;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-public class CompanyServiceTest {
+class CompanyServiceTest {
 
     private static final int COMPANY_ID = 1;
     @InjectMocks
@@ -53,7 +53,7 @@ public class CompanyServiceTest {
         //given
         int page = 1;
         int pageSize = 3;
-        Page<Company> companies = new PageImpl<Company>(asList());
+        Page<Company> companies = new PageImpl<Company>(Collections.emptyList());
         when(companyRepository.findAll(isA(PageRequest.class))).thenReturn(companies);
         //when
         companyService.getCompaniesPage(page, pageSize);
@@ -124,7 +124,7 @@ public class CompanyServiceTest {
     @Test
     void should_throw_NOSUCHDATAEXCEPTION_when_updateCompany_given_() {
         //given
-        when(companyRepository.findById(eq(COMPANY_ID))).thenReturn(Optional.ofNullable(null));
+        when(companyRepository.findById(eq(COMPANY_ID))).thenReturn(Optional.empty());
         //when
         Throwable exception = assertThrows(NoSuchDataException.class, () -> companyService.updateCompany(COMPANY_ID, getMockCompany()));
         //then
@@ -134,7 +134,7 @@ public class CompanyServiceTest {
     @Test
     void should_void_when_deleteCompany_given_company_id() throws NoSuchDataException {
         //given
-        when(companyRepository.findById(eq(COMPANY_ID))).thenReturn(Optional.ofNullable(getMockCompany()));
+        when(companyRepository.findById(eq(COMPANY_ID))).thenReturn(Optional.of(getMockCompany()));
         //when
         companyService.deleteCompany(COMPANY_ID);
         //then
@@ -144,7 +144,7 @@ public class CompanyServiceTest {
     @Test
     void should_throw_NoSuchDataException_when_deleteCompany_given_company_no_exists() throws NoSuchDataException {
         //given
-        when(companyRepository.findById(eq(COMPANY_ID))).thenReturn(Optional.ofNullable(null));
+        when(companyRepository.findById(eq(COMPANY_ID))).thenReturn(Optional.empty());
         //when
         Throwable exception = assertThrows(NoSuchDataException.class, () -> companyService.deleteCompany(COMPANY_ID));
         //then
