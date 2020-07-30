@@ -38,7 +38,7 @@ public class EmployeeControllerIntegrationTest {
     MockMvc mockMvc;
 
     @AfterEach
-    private void clearAll(){
+    private void clearAll() {
         employeeRepository.deleteAll();
         companyRepository.deleteAll();
     }
@@ -47,15 +47,32 @@ public class EmployeeControllerIntegrationTest {
     @Test
     void should_return_employees_in_page_when_getEmployeeInPage_given_page_and_pageSize() throws Exception {
         //given
-        Integer page = 1;
-        Integer pageSize = 1;
-        companyRepository.save(new Company(1,"oocl",1, emptyList()));
-        employeeRepository.save(new Employee(1,"XIAOYI",18,"Male",new BigDecimal(3000),1));
+        companyRepository.save(new Company(1, "oocl", 1, emptyList()));
+        employeeRepository.save(new Employee(1, "XIAOYI", 18, "Male", new BigDecimal(3000), 1));
+        employeeRepository.save(new Employee(2, "xiaowang", 18, "Male", new BigDecimal(3000), 1));
         //when
         mockMvc.perform(get("/employees").contentType(MediaType.APPLICATION_JSON)
-                .requestAttr("page",page).requestAttr("pageSize",pageSize))
+                .param("page","1").param("pageSize","1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$",hasSize(1)))
-                .andExpect(jsonPath("$[0].id").value(1));
+                .andExpect(jsonPath("$.content", hasSize(1)))
+                .andExpect(jsonPath("$.content[0].id").value(1));
+    }
+
+    @Test
+    void should_return_male_employees_when_getEmployeesByGender_given_employees() throws Exception {
+        //given
+        companyRepository.save(new Company(1, "oocl", 1, emptyList()));
+        employeeRepository.save(new Employee(1, "Devin", 22, "male", new BigDecimal(9999), 1));
+        employeeRepository.save(new Employee(2, "xiaohong", 22, "female", new BigDecimal(9999), 1));
+
+        String gender = "male";
+
+        //when
+        mockMvc.perform(get("/employees").contentType(MediaType.APPLICATION_JSON)
+                .param("gender", gender))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id").isNumber())
+                .andExpect(jsonPath("$[0].gender").value("male"));
     }
 }
