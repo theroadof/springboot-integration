@@ -3,12 +3,11 @@ package com.thoughtworks.springbootemployee.service;
 import com.thoughtworks.springbootemployee.Exception.IllegalOperationException;
 import com.thoughtworks.springbootemployee.Exception.NoSuchDataException;
 import com.thoughtworks.springbootemployee.model.Employee;
-import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -27,14 +26,11 @@ class EmployeeServiceTest {
     private static final String MALE = "Male";
     private static final int EMPLOYEE_ID = 1;
 
-
-    @MockBean
-    private EmployeeRepository employeeRepository;
-
-    @MockBean
-    private CompanyRepository companyRepository;
-    @Autowired
+    @InjectMocks
     private EmployeeService employeeService;
+
+    @Mock
+    private EmployeeRepository employeeRepository;
 
     @Test
     void should_return_employees_when_getEmployees_given_() {
@@ -131,7 +127,7 @@ class EmployeeServiceTest {
         Throwable exception = assertThrows(IllegalOperationException.class, () -> employeeService.updateEmployee(EMPLOYEE_ID, employee));
 
         //then
-        assertEquals(IllegalOperationException.class,exception.getClass());
+        assertEquals(IllegalOperationException.class, exception.getClass());
     }
 
     @Test

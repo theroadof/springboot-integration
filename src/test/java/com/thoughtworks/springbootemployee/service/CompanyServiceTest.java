@@ -5,11 +5,10 @@ import com.thoughtworks.springbootemployee.Exception.NoSuchDataException;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
-import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -30,13 +29,10 @@ import static org.mockito.Mockito.when;
 public class CompanyServiceTest {
 
     private static final int COMPANY_ID = 1;
-    @Autowired
+    @InjectMocks
     CompanyService companyService;
 
-    @MockBean
-    EmployeeRepository employeeRepository;
-
-    @MockBean
+    @Mock
     CompanyRepository companyRepository;
 
     @Test
@@ -71,6 +67,7 @@ public class CompanyServiceTest {
 
         when(companyRepository.findById(eq(COMPANY_ID))).thenReturn(Optional.of(new Company()));
         //when
+
         companyService.getCompany(COMPANY_ID);
 
         //then
