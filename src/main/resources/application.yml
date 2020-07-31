@@ -16,4 +16,4 @@ spring:
 
   flyway:
     location:
-      classpath: flyway/migration
+      classpath: db/migration
