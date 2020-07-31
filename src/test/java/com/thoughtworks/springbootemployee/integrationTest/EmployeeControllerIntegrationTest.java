@@ -37,7 +37,7 @@ public class EmployeeControllerIntegrationTest {
     MockMvc mockMvc;
 
     @Before
-    void clearAllBefore(){
+    void clearAllBefore() {
         employeeRepository.deleteAll();
         companyRepository.deleteAll();
     }
@@ -100,18 +100,18 @@ public class EmployeeControllerIntegrationTest {
     void should_return_employee_by_id_when_getEmployee_given_id() throws Exception {
         //given
         Company oocl = companyRepository.save(new Company(1, "oocl", 1, emptyList()));
-        Employee devin = employeeRepository.save(new Employee(1, "Devin", 22, "male", new BigDecimal(9999), 1));
-        Employee xiaoHong = employeeRepository.save(new Employee(2, "xiaohong", 22, "female", new BigDecimal(9999), 1));
 
+        Employee devin = employeeRepository.save(new Employee(1, "Devin", 22, "male", new BigDecimal(9999), oocl.getId()));
+        Employee xiaoHong = employeeRepository.save(new Employee(2, "xiaohong", 22, "female", new BigDecimal(9999), oocl.getId()));
         //when
-        mockMvc.perform(get("/employees/"+devin.getId()).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/employees/" + devin.getId()).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(devin.getId()))
-                .andExpect(jsonPath("$.name").value("Devin"))
-                .andExpect(jsonPath("$.age").value(22))
-                .andExpect(jsonPath("$.gender").value("male"))
+                .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.name").value(devin.getName()))
+                .andExpect(jsonPath("$.age").value(devin.getAge()))
+                .andExpect(jsonPath("$.gender").value(devin.getGender()))
                 .andExpect(jsonPath("$.salary").isNumber())
-                .andExpect(jsonPath("$.companyId").value(1));
+                .andExpect(jsonPath("$.companyId").value(devin.getCompanyId()));
     }
 
     @Test
@@ -131,7 +131,7 @@ public class EmployeeControllerIntegrationTest {
         mockMvc.perform(post("/employees").contentType(MediaType.APPLICATION_JSON)
                 .content(employeeString))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.name").value("Devin"))
                 .andExpect(jsonPath("$.age").value(18))
                 .andExpect(jsonPath("$.gender").value("male"))
@@ -142,23 +142,21 @@ public class EmployeeControllerIntegrationTest {
     @Test
     void should_return_employee_when_update_employee_given_id_and_employee() throws Exception {
         //given
+        Company oocl = companyRepository.save(new Company(1, "oocl", 1, emptyList()));
+        Employee save = employeeRepository.save(new Employee(1, "Devin", 22, "male", new BigDecimal(9999), oocl.getId()));
         String employeeString = "{\n" +
-                "    \"id\": 1,\n" +
+                "    \"id\": " + save.getId() + ",\n" +
                 "    \"name\": \"Devin\",\n" +
                 "    \"age\": 30,\n" +
                 "    \"gender\": \"male\",\n" +
                 "    \"salary\": 3000,\n" +
                 "    \"companyId\": 1\n" +
                 "}";
-        Company oocl = companyRepository.save(new Company(1, "oocl", 1, emptyList()));
-        Employee employee = new Employee(1, "Devin", 22, "male", new BigDecimal(9999), oocl.getId());
-        employeeRepository.save(employee);
-        List<Employee> employees = employeeRepository.findAll();
         //when
-        mockMvc.perform(put("/employees/1").contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(put("/employees/" + save.getId()).contentType(MediaType.APPLICATION_JSON)
                 .content(employeeString))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(employee.getId()))
+                .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.name").value("Devin"))
                 .andExpect(jsonPath("$.age").value(30))
                 .andExpect(jsonPath("$.gender").value("male"))
@@ -173,7 +171,7 @@ public class EmployeeControllerIntegrationTest {
         Employee save = employeeRepository.save(new Employee(1, "Devin", 22, "male", new BigDecimal(9999), oocl.getId()));
 
         //when
-        mockMvc.perform(delete("/employees/"+save.getId()).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(delete("/employees/" + save.getId()).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 }

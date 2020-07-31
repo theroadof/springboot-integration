@@ -96,7 +96,7 @@ public class CompanyControllerIntegrationTest {
         mockMvc.perform(get("/companies/" + company.getId() + "/employees").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].id").value(employee.getId()));
+                .andExpect(jsonPath("$[0].id").isNumber());
 
         //then
 
@@ -135,7 +135,7 @@ public class CompanyControllerIntegrationTest {
         Company companySaved = companyRepository.save(company);
 
         //when
-        mockMvc.perform(put("/companies/"+companySaved.getId()).contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(put("/companies/" + companySaved.getId()).contentType(MediaType.APPLICATION_JSON)
                 .content(companyInfo))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(company.getId()))

@@ -13,3 +13,6 @@ spring:
     console:
       path: /h2-console
       enabled: true
+
+  flyway:
+    location: classpath:flyway/migration
