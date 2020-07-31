@@ -15,4 +15,5 @@ spring:
       enabled: true
 
   flyway:
-    location: classpath:flyway/migration
+    location:
+      classpath: flyway/migration
