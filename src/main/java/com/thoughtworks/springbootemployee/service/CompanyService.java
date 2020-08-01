@@ -3,6 +3,8 @@ package com.thoughtworks.springbootemployee.service;
 import com.thoughtworks.springbootemployee.Exception.IllegalUpdateCompanyException;
 import com.thoughtworks.springbootemployee.Exception.NoSuchCompanyException;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
+import com.thoughtworks.springbootemployee.dto.RequestCompany;
+import com.thoughtworks.springbootemployee.mapper.DTOMapper;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
@@ -16,8 +18,14 @@ import java.util.Objects;
 
 @Service
 public class CompanyService {
-    @Autowired
-    private CompanyRepository companyRepository;
+    private final CompanyRepository companyRepository;
+
+    private final DTOMapper dtoMapper;
+
+    public CompanyService(DTOMapper dtoMapper, CompanyRepository companyRepository) {
+        this.dtoMapper = dtoMapper;
+        this.companyRepository = companyRepository;
+    }
 
     public List<Company> getCompanies() {
         return companyRepository.findAll();
@@ -40,33 +48,35 @@ public class CompanyService {
         return company.getEmployees();
     }
 
-    public Company createCompany(Company company) {
+    public Company createCompany(RequestCompany requestCompany) {
+        DTOMapper dtoMapper = new DTOMapper();
+        Company company = dtoMapper.toCompany(requestCompany);
         return companyRepository.save(company);
     }
 
-    public Company updateCompany(int companyId, Company company){
-        if (companyId != company.getId()) {
+    public Company updateCompany(int companyId, RequestCompany requestCompany){
+        if (companyId != requestCompany.getId()) {
             throw new IllegalUpdateCompanyException(ExceptionMessage.ILLEGAL_UPDATE_COMPANY.getErrorMsg());
         }
 
-        Company oldCompany = companyRepository.findById(companyId).orElse(null);
-        if (oldCompany == null) {
+        Company company = companyRepository.findById(companyId).orElse(null);
+        if (company == null) {
             throw new NoSuchCompanyException(ExceptionMessage.NO_SUCH_COMPANY.getErrorMsg());
         }
 
-        if (company.getCompanyName() != null) {
-            oldCompany.setCompanyName(company.getCompanyName());
+        if (requestCompany.getCompanyName() != null) {
+            company.setCompanyName(requestCompany.getCompanyName());
         }
 
-        if (company.getEmployeeNumber() > 0) {
-            oldCompany.setEmployeeNumber(company.getEmployeeNumber());
+        if (requestCompany.getEmployeeNumber() > 0) {
+            company.setEmployeeNumber(requestCompany.getEmployeeNumber());
         }
 
-        if (company.getEmployees().size() > 0) {
-            oldCompany.setEmployees(company.getEmployees());
+        if (requestCompany.getEmployees().size() > 0) {
+            company.setEmployees(requestCompany.getEmployees());
         }
 
-        return companyRepository.save(oldCompany);
+        return companyRepository.save(company);
     }
 
     public void deleteCompany(int companyId){

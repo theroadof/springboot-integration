@@ -21,4 +21,16 @@ public class DTOMapper {
         BeanUtils.copyProperties(requestCompany,company);
         return company;
     }
+
+    public RequestEmployee toResponseEmployee(Employee employee){
+        RequestEmployee responseEmployee = new RequestEmployee();
+        BeanUtils.copyProperties(employee,responseEmployee);
+        return responseEmployee;
+    }
+
+    public RequestCompany toResponseCompany(Company company){
+        RequestCompany responseCompany = new RequestCompany();
+        BeanUtils.copyProperties(company,responseCompany);
+        return responseCompany;
+    }
 }

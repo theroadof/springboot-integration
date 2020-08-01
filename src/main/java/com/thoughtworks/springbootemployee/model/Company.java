@@ -13,10 +13,10 @@ public class Company {
     @Id
     private int id;
 
-    @Column(name = "companyName")
+    @Column(name = "company_name")
     private String companyName;
 
-    @Column(name = "employNumber")
+    @Column(name = "employee_number")
     private int employeeNumber;
 
     @OneToMany(cascade = {CascadeType.ALL},mappedBy = "companyId")

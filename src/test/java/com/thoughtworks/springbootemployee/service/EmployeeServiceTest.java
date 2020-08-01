@@ -2,11 +2,18 @@ package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.Exception.IllegalUpdateEmployeeException;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
+import com.thoughtworks.springbootemployee.dto.RequestCompany;
+import com.thoughtworks.springbootemployee.dto.RequestEmployee;
+import com.thoughtworks.springbootemployee.mapper.DTOMapper;
+import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
+import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -27,16 +34,23 @@ class EmployeeServiceTest {
     private static final String MALE = "Male";
     private static final int EMPLOYEE_ID = 1;
 
-    @InjectMocks
-    private EmployeeService employeeService;
+    @Mock
+    private DTOMapper dtoMapper;
 
     @Mock
     private EmployeeRepository employeeRepository;
 
+    @InjectMocks
+    private EmployeeService employeeService;
+    @Autowired
+    private CompanyRepository companyRepository;
+
+
     @Test
     void should_return_employees_when_getEmployees_given_() {
         //given
-        when(employeeRepository.findAll()).thenReturn(emptyList());
+
+        when(employeeRepository.findAll()).thenReturn(asList(new Employee(1,"teddy",22,"male",new BigDecimal(100),1)));
 
         //when
         List<Employee> employees = employeeService.queryEmployees();
@@ -86,23 +100,35 @@ class EmployeeServiceTest {
     @Test
     void should_return_employee_when_createEmployee_given_employee() {
         //given
-        when(employeeRepository.save(any())).thenReturn(any());
+        RequestEmployee requestEmployee = new RequestEmployee();
+        Employee employee = new Employee(11, "tom chen", 18, "Male", new BigDecimal(9999), 1);
+        BeanUtils.copyProperties(employee,requestEmployee);
+        companyRepository.save(new Company(1,"oocl",0,emptyList()));
+        when(dtoMapper.toEmployee(requestEmployee)).thenReturn(employee);
+        when(employeeRepository.save(employee)).thenReturn(employee);
 
         //when
-        Employee employee = employeeService.createEmployee(new Employee(11, "tom chen", 18, "Male", new BigDecimal(9999), 1));
+        Employee savedEmployee = employeeService.createEmployee(requestEmployee);
 
         //then
-        verify(employeeRepository).save(any());
+        assertEquals(savedEmployee.getId(),employee.getId());
+        assertEquals(savedEmployee.getName(),employee.getName());
     }
 
     @Test
     void should_return_null_when_createEmployee_given_employee_exists() {
         //given
-        when(employeeRepository.save(any())).thenReturn(null);
+        RequestEmployee requestEmployee = new RequestEmployee();
+        Employee employee = new Employee(1, "tom chen", 18, "Male", new BigDecimal(9999), 1);
+        BeanUtils.copyProperties(employee,requestEmployee);
+        companyRepository.save(new Company(1,"oocl",0,emptyList()));
+        when(dtoMapper.toEmployee(requestEmployee)).thenReturn(employee);
+        when(employeeRepository.save(employee)).thenReturn(null);
+
         //when
-        Employee employee = employeeService.createEmployee(new Employee(1, "tom chen", 18, "Male", new BigDecimal(9999), 1));
+        Employee savedEmployee = employeeService.createEmployee(requestEmployee);
         //then
-        assertNull(employee);
+        assertNull(savedEmployee);
     }
 
     @Test
@@ -111,18 +137,20 @@ class EmployeeServiceTest {
         Employee employee = new Employee(1, "xiaoshiyi", 18, "Male", new BigDecimal(5000), 1);
         when(employeeRepository.save(any())).thenReturn(employee);
         when(employeeRepository.findById(EMPLOYEE_ID)).thenReturn(Optional.of(employee));
+        RequestEmployee requestEmployee = new RequestEmployee();
+        BeanUtils.copyProperties(employee,requestEmployee);
 
         //when
-        Employee employeeUpdated = employeeService.updateEmployee(EMPLOYEE_ID, employee);
+        Employee employeeUpdated = employeeService.updateEmployee(EMPLOYEE_ID, requestEmployee);
 
         //then
-        assertNotNull(employeeUpdated);
+        assertEquals(employee.getId(),employeeUpdated.getId());
     }
 
     @Test
     void should_return_employee_when_updateEmployee_given_new_employee() throws Exception {
         //given
-        Employee employee = new Employee(2, "xiaoshiyi", 18, "Male", new BigDecimal(5000), 1);
+        RequestEmployee employee = new RequestEmployee(2, "xiaoshiyi", 18, "Male", new BigDecimal(5000), 1);
 
         //when
         Throwable exception = assertThrows(IllegalUpdateEmployeeException.class, () -> employeeService.updateEmployee(EMPLOYEE_ID, employee));
