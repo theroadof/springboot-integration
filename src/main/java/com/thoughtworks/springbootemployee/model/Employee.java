@@ -1,8 +1,6 @@
 package com.thoughtworks.springbootemployee.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -23,6 +21,7 @@ public class Employee {
 
     private BigDecimal salary;
 
+    @Column(name = "company_id")
     private int companyId;
 
     public Employee(int id, String name, int age, String gender, BigDecimal salary, int companyId) {

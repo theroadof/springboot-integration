@@ -2,17 +2,22 @@ package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.Exception.IllegalUpdateEmployeeException;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
+import com.thoughtworks.springbootemployee.dto.RequestCompany;
+import com.thoughtworks.springbootemployee.dto.RequestEmployee;
+import com.thoughtworks.springbootemployee.mapper.DTOMapper;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.beans.BeanUtils;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,10 +38,12 @@ class EmployeeServiceTest {
     @Mock
     private EmployeeRepository employeeRepository;
 
+
     @Test
     void should_return_employees_when_getEmployees_given_() {
         //given
-        when(employeeRepository.findAll()).thenReturn(emptyList());
+
+        when(employeeRepository.findAll()).thenReturn(Arrays.asList(new Employee(1,"teddy",22,"male",new BigDecimal(100),1)));
 
         //when
         List<Employee> employees = employeeService.queryEmployees();
@@ -87,22 +94,30 @@ class EmployeeServiceTest {
     void should_return_employee_when_createEmployee_given_employee() {
         //given
         when(employeeRepository.save(any())).thenReturn(any());
+        RequestEmployee requestEmployee = new RequestEmployee();
+        Employee employee = new Employee(11, "tom chen", 18, "Male", new BigDecimal(9999), 1);
+        BeanUtils.copyProperties(employee,requestEmployee);
 
         //when
-        Employee employee = employeeService.createEmployee(new Employee(11, "tom chen", 18, "Male", new BigDecimal(9999), 1));
+        Employee savedEmployee = employeeService.createEmployee(requestEmployee);
 
         //then
-        verify(employeeRepository).save(any());
+        assertEquals(savedEmployee.getId(),employee.getId());
+        assertEquals(savedEmployee.getName(),employee.getName());
     }
 
     @Test
     void should_return_null_when_createEmployee_given_employee_exists() {
         //given
         when(employeeRepository.save(any())).thenReturn(null);
+        RequestEmployee requestEmployee = new RequestEmployee();
+        Employee employee = new Employee(1, "tom chen", 18, "Male", new BigDecimal(9999), 1);
+        BeanUtils.copyProperties(employee,requestEmployee);
+
         //when
-        Employee employee = employeeService.createEmployee(new Employee(1, "tom chen", 18, "Male", new BigDecimal(9999), 1));
+        Employee savedEmployee = employeeService.createEmployee(requestEmployee);
         //then
-        assertNull(employee);
+        assertNull(savedEmployee);
     }
 
     @Test
@@ -111,18 +126,20 @@ class EmployeeServiceTest {
         Employee employee = new Employee(1, "xiaoshiyi", 18, "Male", new BigDecimal(5000), 1);
         when(employeeRepository.save(any())).thenReturn(employee);
         when(employeeRepository.findById(EMPLOYEE_ID)).thenReturn(Optional.of(employee));
+        RequestEmployee requestEmployee = new RequestEmployee();
+        BeanUtils.copyProperties(employee,requestEmployee);
 
         //when
-        Employee employeeUpdated = employeeService.updateEmployee(EMPLOYEE_ID, employee);
+        Employee employeeUpdated = employeeService.updateEmployee(EMPLOYEE_ID, requestEmployee);
 
         //then
-        assertNotNull(employeeUpdated);
+        assertEquals(employee.getId(),employeeUpdated.getId());
     }
 
     @Test
     void should_return_employee_when_updateEmployee_given_new_employee() throws Exception {
         //given
-        Employee employee = new Employee(2, "xiaoshiyi", 18, "Male", new BigDecimal(5000), 1);
+        RequestEmployee employee = new RequestEmployee(2, "xiaoshiyi", 18, "Male", new BigDecimal(5000), 1);
 
         //when
         Throwable exception = assertThrows(IllegalUpdateEmployeeException.class, () -> employeeService.updateEmployee(EMPLOYEE_ID, employee));

@@ -3,6 +3,8 @@ package com.thoughtworks.springbootemployee.service;
 import com.thoughtworks.springbootemployee.Exception.IllegalUpdateEmployeeException;
 import com.thoughtworks.springbootemployee.Exception.NoSuchEmployeeException;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
+import com.thoughtworks.springbootemployee.dto.RequestEmployee;
+import com.thoughtworks.springbootemployee.mapper.DTOMapper;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,8 @@ public class EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    @Autowired
+    private DTOMapper dtoMapper;
 
     public List<Employee> queryEmployees() {
         return employeeRepository.findAll();
@@ -35,31 +39,32 @@ public class EmployeeService {
         return employeeRepository.findById(employeeId).orElse(null);
     }
 
-    public Employee createEmployee(Employee employee) {
+    public Employee createEmployee(RequestEmployee requestEmployee) {
+        Employee employee = dtoMapper.toEmployee(requestEmployee);
         return employeeRepository.save(employee);
     }
 
-    public Employee updateEmployee(Integer id, Employee employee){
-        if (!id.equals(employee.getId())) {
+    public Employee updateEmployee(Integer id, RequestEmployee requestEmployee){
+        if (!id.equals(requestEmployee.getId())) {
             throw new IllegalUpdateEmployeeException(ExceptionMessage.ILLEGAL_UPDATE_EMPLOYEE.getErrorMsg());
         }
-        Employee oldEmployee = employeeRepository.findById(id).orElse(null);
-        if (oldEmployee == null) {
+        Employee employee = employeeRepository.findById(id).orElse(null);
+        if (employee == null) {
             throw new NoSuchEmployeeException(ExceptionMessage.NO_SUCH_EMPLOYEE.getErrorMsg());
         }
-        if (employee.getName() != null) {
-            oldEmployee.setName(employee.getName());
+        if (requestEmployee.getName() != null) {
+            employee.setName(requestEmployee.getName());
         }
-        if (employee.getAge() > 0) {
-            oldEmployee.setAge(employee.getAge());
+        if (requestEmployee.getAge() > 0) {
+            employee.setAge(requestEmployee.getAge());
         }
-        if (employee.getGender() != null) {
-            oldEmployee.setGender(employee.getGender());
+        if (requestEmployee.getGender() != null) {
+            employee.setGender(requestEmployee.getGender());
         }
-        if (employee.getSalary() != null) {
-            oldEmployee.setSalary(employee.getSalary());
+        if (requestEmployee.getSalary() != null) {
+            employee.setSalary(requestEmployee.getSalary());
         }
-        return employeeRepository.save(oldEmployee);
+        return employeeRepository.save(employee);
     }
 
     public void deleteEmployee(int employeeId){
