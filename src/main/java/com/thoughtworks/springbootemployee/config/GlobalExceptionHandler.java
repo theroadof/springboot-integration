@@ -15,7 +15,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(NoSuchCompanyException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     String handleIllegalOperationException() {
         return ExceptionMessage.NO_SUCH_COMPANY.getErrorMsg();
     }
