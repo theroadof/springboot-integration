@@ -19,18 +19,18 @@ public class CompanyController {
     private CompanyService companyService;
 
     @GetMapping(params = {"page", "pageSize"})
-    public Page<Company> getCompaniesInPage(@RequestParam(value = "page") Integer page,
+    public Page<RequestCompany> getCompaniesInPage(@RequestParam(value = "page") Integer page,
                                             @RequestParam(value = "pageSize") Integer pageSize) {
         return companyService.getCompaniesPage(page, pageSize);
     }
 
     @GetMapping
-    public List<Company> getCompanies() {
+    public List<RequestCompany> getCompanies() {
         return companyService.getCompanies();
     }
 
     @GetMapping("/{id}")
-    public Company getCompany(@PathVariable int id) {
+    public RequestCompany getCompany(@PathVariable int id) {
         return companyService.getCompany(id);
     }
 
@@ -41,12 +41,12 @@ public class CompanyController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Company addCompany(@RequestBody RequestCompany requestCompany) {
+    public RequestCompany addCompany(@RequestBody RequestCompany requestCompany) {
         return companyService.createCompany(requestCompany);
     }
 
     @PutMapping("/{id}")
-    public Company updateCompany(@PathVariable("id") int id, @RequestBody RequestCompany requestCompany) {
+    public RequestCompany updateCompany(@PathVariable("id") int id, @RequestBody RequestCompany requestCompany) {
         return companyService.updateCompany(id, requestCompany);
     }
 

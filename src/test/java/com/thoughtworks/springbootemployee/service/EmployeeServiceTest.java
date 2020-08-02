@@ -53,7 +53,7 @@ class EmployeeServiceTest {
         when(employeeRepository.findAll()).thenReturn(asList(new Employee(1,"teddy",22,"male",new BigDecimal(100),1)));
 
         //when
-        List<Employee> employees = employeeService.queryEmployees();
+        List<RequestEmployee> employees = employeeService.queryEmployees();
 
         //then
         assertNotNull(employees);
@@ -65,7 +65,7 @@ class EmployeeServiceTest {
         //given
         when(employeeRepository.findAllByGender(any())).thenReturn(emptyList());
         //when
-        List<Employee> employees = employeeService.queryEmployeesByGender(MALE);
+        List<RequestEmployee> employees = employeeService.queryEmployeesByGender(MALE);
 
         //then
         assertNotNull(employees);
@@ -79,7 +79,7 @@ class EmployeeServiceTest {
         when(employeeRepository.findAll(isA(PageRequest.class))).thenReturn(employeeswithPage);
 
         //when
-        Page<Employee> employees = employeeService.queryEmployeesByPage(1, 2);
+        Page<RequestEmployee> employees = employeeService.queryEmployeesByPage(1, 2);
 
         //then
         assertEquals(2, employees.getSize());
@@ -91,7 +91,7 @@ class EmployeeServiceTest {
         when(employeeRepository.findById(any())).thenReturn(Optional.of(new Employee(1, "xx", 18, "Male", new BigDecimal(2), 1)));
 
         //when
-        Employee employee = employeeService.queryEmployee(EMPLOYEE_ID);
+        RequestEmployee employee = employeeService.queryEmployee(EMPLOYEE_ID);
 
         //then
         assertNotNull(employee);
@@ -108,7 +108,7 @@ class EmployeeServiceTest {
         when(employeeRepository.save(employee)).thenReturn(employee);
 
         //when
-        Employee savedEmployee = employeeService.createEmployee(requestEmployee);
+        RequestEmployee savedEmployee = employeeService.createEmployee(requestEmployee);
 
         //then
         assertEquals(savedEmployee.getId(),employee.getId());
@@ -126,7 +126,7 @@ class EmployeeServiceTest {
         when(employeeRepository.save(employee)).thenReturn(null);
 
         //when
-        Employee savedEmployee = employeeService.createEmployee(requestEmployee);
+        RequestEmployee savedEmployee = employeeService.createEmployee(requestEmployee);
         //then
         assertNull(savedEmployee);
     }
@@ -141,7 +141,7 @@ class EmployeeServiceTest {
         BeanUtils.copyProperties(employee,requestEmployee);
 
         //when
-        Employee employeeUpdated = employeeService.updateEmployee(EMPLOYEE_ID, requestEmployee);
+        RequestEmployee employeeUpdated = employeeService.updateEmployee(EMPLOYEE_ID, requestEmployee);
 
         //then
         assertEquals(employee.getId(),employeeUpdated.getId());

@@ -18,25 +18,23 @@ import java.util.Objects;
 
 @Service
 public class CompanyService {
-    private final CompanyRepository companyRepository;
+    @Autowired
+    private CompanyRepository companyRepository;
 
-    private final DTOMapper dtoMapper;
+    @Autowired
+    private DTOMapper dtoMapper;
 
-    public CompanyService(DTOMapper dtoMapper, CompanyRepository companyRepository) {
-        this.dtoMapper = dtoMapper;
-        this.companyRepository = companyRepository;
+
+    public List<RequestCompany> getCompanies() {
+        return dtoMapper.toResponseCompanies(companyRepository.findAll());
     }
 
-    public List<Company> getCompanies() {
-        return companyRepository.findAll();
+    public Page<RequestCompany> getCompaniesPage(int page, int pageSize) {
+        return dtoMapper.toResponseCompanyPage(companyRepository.findAll(PageRequest.of(page-1, pageSize)));
     }
 
-    public Page<Company> getCompaniesPage(int page, int pageSize) {
-        return companyRepository.findAll(PageRequest.of(page-1, pageSize));
-    }
-
-    public Company getCompany(int id) {
-        return companyRepository.findById(id).orElse(null);
+    public RequestCompany getCompany(int id) {
+        return dtoMapper.toResponseCompany(companyRepository.findById(id).orElse(null));
     }
 
 
@@ -48,13 +46,12 @@ public class CompanyService {
         return company.getEmployees();
     }
 
-    public Company createCompany(RequestCompany requestCompany) {
-        DTOMapper dtoMapper = new DTOMapper();
+    public RequestCompany createCompany(RequestCompany requestCompany) {
         Company company = dtoMapper.toCompany(requestCompany);
-        return companyRepository.save(company);
+        return dtoMapper.toResponseCompany(companyRepository.save(company));
     }
 
-    public Company updateCompany(int companyId, RequestCompany requestCompany){
+    public RequestCompany updateCompany(int companyId, RequestCompany requestCompany){
         if (companyId != requestCompany.getId()) {
             throw new IllegalUpdateCompanyException(ExceptionMessage.ILLEGAL_UPDATE_COMPANY.getErrorMsg());
         }
@@ -76,7 +73,7 @@ public class CompanyService {
             company.setEmployees(requestCompany.getEmployees());
         }
 
-        return companyRepository.save(company);
+        return dtoMapper.toResponseCompany(companyRepository.save(company));
     }
 
     public void deleteCompany(int companyId){

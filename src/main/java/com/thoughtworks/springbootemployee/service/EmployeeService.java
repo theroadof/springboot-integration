@@ -23,28 +23,28 @@ public class EmployeeService {
     @Autowired
     private DTOMapper dtoMapper;
 
-    public List<Employee> queryEmployees() {
-        return employeeRepository.findAll();
+    public List<RequestEmployee> queryEmployees() {
+        return dtoMapper.toResponseEmployees(employeeRepository.findAll());
     }
 
-    public List<Employee> queryEmployeesByGender(String gender) {
-        return employeeRepository.findAllByGender(gender);
+    public List<RequestEmployee> queryEmployeesByGender(String gender) {
+        return dtoMapper.toResponseEmployees(employeeRepository.findAllByGender(gender));
     }
 
-    public Page<Employee> queryEmployeesByPage(int currentPage, int pageSize) {
-        return employeeRepository.findAll(PageRequest.of(currentPage-1, pageSize));
+    public Page<RequestEmployee> queryEmployeesByPage(int currentPage, int pageSize) {
+        return dtoMapper.toResponseEmployeePage(employeeRepository.findAll(PageRequest.of(currentPage-1, pageSize)));
     }
 
-    public Employee queryEmployee(int employeeId) {
-        return employeeRepository.findById(employeeId).orElse(null);
+    public RequestEmployee queryEmployee(int employeeId) {
+        return dtoMapper.toResponseEmployee(employeeRepository.findById(employeeId).orElse(null));
     }
 
-    public Employee createEmployee(RequestEmployee requestEmployee) {
+    public RequestEmployee createEmployee(RequestEmployee requestEmployee) {
         Employee employee = dtoMapper.toEmployee(requestEmployee);
-        return employeeRepository.save(employee);
+        return dtoMapper.toResponseEmployee(employeeRepository.save(employee));
     }
 
-    public Employee updateEmployee(Integer id, RequestEmployee requestEmployee){
+    public RequestEmployee updateEmployee(Integer id, RequestEmployee requestEmployee){
         if (!id.equals(requestEmployee.getId())) {
             throw new IllegalUpdateEmployeeException(ExceptionMessage.ILLEGAL_UPDATE_EMPLOYEE.getErrorMsg());
         }
@@ -64,7 +64,7 @@ public class EmployeeService {
         if (requestEmployee.getSalary() != null) {
             employee.setSalary(requestEmployee.getSalary());
         }
-        return employeeRepository.save(employee);
+        return dtoMapper.toResponseEmployee(employeeRepository.save(employee));
     }
 
     public void deleteEmployee(int employeeId){

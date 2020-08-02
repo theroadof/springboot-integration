@@ -47,9 +47,10 @@ class CompanyServiceTest {
     void should_return_companies_when_getCompanies_given_() {
         //given
         when(companyRepository.findAll()).thenReturn(getMockCompanies());
+//        when(dtoMapper.toResponseCompanies(any())).thenReturn(dtoMapper.toResponseCompanies(getMockCompanies()));
 
         //when
-        List<Company> companies = companyService.getCompanies();
+        List<RequestCompany> companies = companyService.getCompanies();
 
         //then
         assertEquals(10, companies.size());
@@ -99,10 +100,11 @@ class CompanyServiceTest {
         //given
         RequestCompany requestCompany = new RequestCompany();
         BeanUtils.copyProperties(getMockCompany(),requestCompany);
+        when(dtoMapper.toCompany(requestCompany)).thenReturn(getMockCompany());
         when(companyRepository.save(getMockCompany())).thenReturn(getMockCompany());
 
         //when
-        Company company = companyService.createCompany(requestCompany);
+        RequestCompany company = companyService.createCompany(requestCompany);
 
         //then
         assertEquals(requestCompany.getId(),company.getId());
@@ -120,7 +122,7 @@ class CompanyServiceTest {
         //when
         RequestCompany requestCompany = new RequestCompany();
         BeanUtils.copyProperties(getMockCompany(),requestCompany);
-        Company companyUpdated = companyService.updateCompany(COMPANY_ID, requestCompany);
+        RequestCompany companyUpdated = companyService.updateCompany(COMPANY_ID, requestCompany);
         //then
         verify(companyRepository).findById(COMPANY_ID);
         verify(companyRepository).save(isA(Company.class));
