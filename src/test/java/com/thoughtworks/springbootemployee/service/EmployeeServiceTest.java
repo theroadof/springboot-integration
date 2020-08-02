@@ -20,6 +20,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +50,6 @@ class EmployeeServiceTest {
     @Test
     void should_return_employees_when_getEmployees_given_() {
         //given
-
         when(employeeRepository.findAll()).thenReturn(asList(new Employee(1,"teddy",22,"male",new BigDecimal(100),1)));
 
         //when

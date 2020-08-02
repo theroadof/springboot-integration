@@ -1,0 +1,1 @@
+alter table company rename column name to company_name;
