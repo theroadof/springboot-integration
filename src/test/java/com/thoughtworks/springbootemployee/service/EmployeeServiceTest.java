@@ -74,7 +74,10 @@ class EmployeeServiceTest {
         //given
         Page<Employee> employeeswithPage = new PageImpl<Employee>(asList(new Employee(1, "xx", 18, "Male", new BigDecimal(2), 1),
                 new Employee(2, "xx", 19, "Male", new BigDecimal(2), 1)));
+        Page<RequestEmployee> requestEmployeePage = new PageImpl<>(asList(new RequestEmployee(1, "xx", 18, "Male", new BigDecimal(2), 1),
+                new RequestEmployee(2, "xx", 19, "Male", new BigDecimal(2), 1)));
         when(employeeRepository.findAll(isA(PageRequest.class))).thenReturn(employeeswithPage);
+        when(dtoMapper.toResponseEmployeePage(employeeswithPage)).thenReturn(requestEmployeePage);
 
         //when
         Page<RequestEmployee> employees = employeeService.queryEmployeesByPage(1, 2);
@@ -86,13 +89,15 @@ class EmployeeServiceTest {
     @Test
     void should_return_employee_when_getEmployee_given_employee_id() {
         //given
-        when(employeeRepository.findById(any())).thenReturn(Optional.of(new Employee(1, "xx", 18, "Male", new BigDecimal(2), 1)));
+        Employee employee = new Employee(1, "xx", 18, "Male", new BigDecimal(2), 1);
+        when(employeeRepository.findById(any())).thenReturn(Optional.of(employee));
+        when(dtoMapper.toResponseEmployee(employee)).thenReturn(new RequestEmployee(1, "xx", 18, "Male", new BigDecimal(2), 1));
 
         //when
-        RequestEmployee employee = employeeService.queryEmployee(EMPLOYEE_ID);
+        RequestEmployee savedEmployee = employeeService.queryEmployee(EMPLOYEE_ID);
 
         //then
-        assertNotNull(employee);
+        assertNotNull(savedEmployee);
     }
 
     @Test
@@ -104,6 +109,7 @@ class EmployeeServiceTest {
         companyRepository.save(new Company(1,"oocl",0,emptyList()));
         when(dtoMapper.toEmployee(requestEmployee)).thenReturn(employee);
         when(employeeRepository.save(employee)).thenReturn(employee);
+        when(dtoMapper.toResponseEmployee(employee)).thenReturn(requestEmployee);
 
         //when
         RequestEmployee savedEmployee = employeeService.createEmployee(requestEmployee);
@@ -133,10 +139,11 @@ class EmployeeServiceTest {
     void should_return_employee_when_updateEmployee_given_exists_employee() throws Exception {
         //given
         Employee employee = new Employee(1, "xiaoshiyi", 18, "Male", new BigDecimal(5000), 1);
-        when(employeeRepository.save(any())).thenReturn(employee);
+        when(employeeRepository.save(employee)).thenReturn(employee);
         when(employeeRepository.findById(EMPLOYEE_ID)).thenReturn(Optional.of(employee));
         RequestEmployee requestEmployee = new RequestEmployee();
         BeanUtils.copyProperties(employee,requestEmployee);
+        when(dtoMapper.toResponseEmployee(employee)).thenReturn(requestEmployee);
 
         //when
         RequestEmployee employeeUpdated = employeeService.updateEmployee(EMPLOYEE_ID, requestEmployee);
