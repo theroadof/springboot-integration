@@ -2,6 +2,8 @@ package com.thoughtworks.springbootemployee.mapper;
 
 import com.thoughtworks.springbootemployee.dto.RequestCompany;
 import com.thoughtworks.springbootemployee.dto.RequestEmployee;
+import com.thoughtworks.springbootemployee.dto.ResponseCompany;
+import com.thoughtworks.springbootemployee.dto.ResponseEmployee;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import org.springframework.beans.BeanUtils;
@@ -32,53 +34,53 @@ public class DTOMapper {
         return company;
     }
 
-    public RequestEmployee toResponseEmployee(Employee employee){
+    public ResponseEmployee toResponseEmployee(Employee employee){
         if(isNull(employee)) {return null;}
-        RequestEmployee responseEmployee = new RequestEmployee();
+        ResponseEmployee responseEmployee = new ResponseEmployee();
         BeanUtils.copyProperties(employee,responseEmployee);
         return responseEmployee;
     }
 
-    public RequestCompany toResponseCompany(Company company){
+    public ResponseCompany toResponseCompany(Company company){
         if(isNull(company)) {return null;}
-        RequestCompany responseCompany = new RequestCompany();
+        ResponseCompany responseCompany = new ResponseCompany();
         BeanUtils.copyProperties(company,responseCompany);
         return responseCompany;
     }
 
-    public List<RequestCompany> toResponseCompanies(List<Company> companies){
+    public List<ResponseCompany> toResponseCompanies(List<Company> companies){
         if(isNull(companies)) {return null;}
-        List<RequestCompany> responseCompanies = new ArrayList<>();
+        List<ResponseCompany> responseCompanies = new ArrayList<>();
         companies.forEach(company -> {
             responseCompanies.add(toResponseCompany(company));
         });
         return responseCompanies;
     }
 
-    public List<RequestEmployee> toResponseEmployees(List<Employee> employees){
+    public List<ResponseEmployee> toResponseEmployees(List<Employee> employees){
         if(isNull(employees)) {return null;}
-        List<RequestEmployee> responseEmployees = new ArrayList<>();
+        List<ResponseEmployee> responseEmployees = new ArrayList<>();
         employees.forEach(employee -> {
             responseEmployees.add(toResponseEmployee(employee));
         });
         return responseEmployees;
     }
 
-    public Page<RequestCompany> toResponseCompanyPage(Page<Company> companies){
+    public Page<ResponseCompany> toResponseCompanyPage(Page<Company> companies){
         if (isNull(companies)) {return null;}
-        List<RequestCompany> responseCompanies = new ArrayList<>();
+        List<ResponseCompany> responseCompanies = new ArrayList<>();
         companies.forEach(company -> {
             responseCompanies.add(toResponseCompany(company));
         });
-        return new PageImpl<RequestCompany>(responseCompanies);
+        return new PageImpl<ResponseCompany>(responseCompanies);
     }
 
-    public Page<RequestEmployee> toResponseEmployeePage(Page<Employee> employees){
+    public Page<ResponseEmployee> toResponseEmployeePage(Page<Employee> employees){
         if (isNull(employees)) {return null;}
-        List<RequestEmployee> responseEmployees = new ArrayList<>();
+        List<ResponseEmployee> responseEmployees = new ArrayList<>();
         employees.forEach(employee -> {
             responseEmployees.add(toResponseEmployee(employee));
         });
-        return new PageImpl<RequestEmployee>(responseEmployees);
+        return new PageImpl<ResponseEmployee>(responseEmployees);
     }
 }

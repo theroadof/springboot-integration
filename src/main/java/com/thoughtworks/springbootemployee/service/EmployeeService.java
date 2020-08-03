@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.service;
 
+import com.thoughtworks.springbootemployee.dto.ResponseEmployee;
 import com.thoughtworks.springbootemployee.exception.IllegalUpdateEmployeeException;
 import com.thoughtworks.springbootemployee.exception.NoSuchEmployeeException;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
@@ -23,28 +24,28 @@ public class EmployeeService {
     @Autowired
     private DTOMapper dtoMapper;
 
-    public List<RequestEmployee> queryEmployees() {
+    public List<ResponseEmployee> queryEmployees() {
         return dtoMapper.toResponseEmployees(employeeRepository.findAll());
     }
 
-    public List<RequestEmployee> queryEmployeesByGender(String gender) {
+    public List<ResponseEmployee> queryEmployeesByGender(String gender) {
         return dtoMapper.toResponseEmployees(employeeRepository.findAllByGender(gender));
     }
 
-    public Page<RequestEmployee> queryEmployeesByPage(int currentPage, int pageSize) {
+    public Page<ResponseEmployee> queryEmployeesByPage(int currentPage, int pageSize) {
         return dtoMapper.toResponseEmployeePage(employeeRepository.findAll(PageRequest.of(currentPage-1, pageSize)));
     }
 
-    public RequestEmployee queryEmployee(int employeeId) {
+    public ResponseEmployee queryEmployee(int employeeId) {
         return dtoMapper.toResponseEmployee(employeeRepository.findById(employeeId).orElse(null));
     }
 
-    public RequestEmployee createEmployee(RequestEmployee requestEmployee) {
+    public ResponseEmployee createEmployee(RequestEmployee requestEmployee) {
         Employee employee = dtoMapper.toEmployee(requestEmployee);
         return dtoMapper.toResponseEmployee(employeeRepository.save(employee));
     }
 
-    public RequestEmployee updateEmployee(Integer id, RequestEmployee requestEmployee){
+    public ResponseEmployee updateEmployee(Integer id, RequestEmployee requestEmployee){
         if (!id.equals(requestEmployee.getId())) {
             throw new IllegalUpdateEmployeeException(ExceptionMessage.ILLEGAL_UPDATE_EMPLOYEE.getErrorMsg());
         }

@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.service;
 
+import com.thoughtworks.springbootemployee.dto.ResponseEmployee;
 import com.thoughtworks.springbootemployee.exception.IllegalUpdateEmployeeException;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
 import com.thoughtworks.springbootemployee.dto.RequestEmployee;
@@ -51,7 +52,7 @@ class EmployeeServiceTest {
         when(employeeRepository.findAll()).thenReturn(asList(new Employee(1,"teddy",22,"male",new BigDecimal(100),1)));
 
         //when
-        List<RequestEmployee> employees = employeeService.queryEmployees();
+        List<ResponseEmployee> employees = employeeService.queryEmployees();
 
         //then
         assertNotNull(employees);
@@ -63,7 +64,7 @@ class EmployeeServiceTest {
         //given
         when(employeeRepository.findAllByGender(any())).thenReturn(emptyList());
         //when
-        List<RequestEmployee> employees = employeeService.queryEmployeesByGender(MALE);
+        List<ResponseEmployee> employees = employeeService.queryEmployeesByGender(MALE);
 
         //then
         assertNotNull(employees);
@@ -74,13 +75,13 @@ class EmployeeServiceTest {
         //given
         Page<Employee> employeeswithPage = new PageImpl<Employee>(asList(new Employee(1, "xx", 18, "Male", new BigDecimal(2), 1),
                 new Employee(2, "xx", 19, "Male", new BigDecimal(2), 1)));
-        Page<RequestEmployee> requestEmployeePage = new PageImpl<>(asList(new RequestEmployee(1, "xx", 18, "Male", new BigDecimal(2), 1),
-                new RequestEmployee(2, "xx", 19, "Male", new BigDecimal(2), 1)));
+        Page<ResponseEmployee> responseEmployeePage = new PageImpl<>(asList(new ResponseEmployee(1, "xx", 18, "Male", new BigDecimal(2), 1),
+                new ResponseEmployee(2, "xx", 19, "Male", new BigDecimal(2), 1)));
         when(employeeRepository.findAll(isA(PageRequest.class))).thenReturn(employeeswithPage);
-        when(dtoMapper.toResponseEmployeePage(employeeswithPage)).thenReturn(requestEmployeePage);
+        when(dtoMapper.toResponseEmployeePage(employeeswithPage)).thenReturn(responseEmployeePage);
 
         //when
-        Page<RequestEmployee> employees = employeeService.queryEmployeesByPage(1, 2);
+        Page<ResponseEmployee> employees = employeeService.queryEmployeesByPage(1, 2);
 
         //then
         assertEquals(2, employees.getSize());
@@ -91,10 +92,10 @@ class EmployeeServiceTest {
         //given
         Employee employee = new Employee(1, "xx", 18, "Male", new BigDecimal(2), 1);
         when(employeeRepository.findById(any())).thenReturn(Optional.of(employee));
-        when(dtoMapper.toResponseEmployee(employee)).thenReturn(new RequestEmployee(1, "xx", 18, "Male", new BigDecimal(2), 1));
+        when(dtoMapper.toResponseEmployee(employee)).thenReturn(new ResponseEmployee(1, "xx", 18, "Male", new BigDecimal(2), 1));
 
         //when
-        RequestEmployee savedEmployee = employeeService.queryEmployee(EMPLOYEE_ID);
+        ResponseEmployee savedEmployee = employeeService.queryEmployee(EMPLOYEE_ID);
 
         //then
         assertNotNull(savedEmployee);
@@ -104,15 +105,17 @@ class EmployeeServiceTest {
     void should_return_employee_when_createEmployee_given_employee() {
         //given
         RequestEmployee requestEmployee = new RequestEmployee();
+        ResponseEmployee responseEmployee = new ResponseEmployee();
         Employee employee = new Employee(11, "tom chen", 18, "Male", new BigDecimal(9999), 1);
         BeanUtils.copyProperties(employee,requestEmployee);
+        BeanUtils.copyProperties(employee,responseEmployee);
         companyRepository.save(new Company(1,"oocl",0,emptyList()));
         when(dtoMapper.toEmployee(requestEmployee)).thenReturn(employee);
         when(employeeRepository.save(employee)).thenReturn(employee);
-        when(dtoMapper.toResponseEmployee(employee)).thenReturn(requestEmployee);
+        when(dtoMapper.toResponseEmployee(employee)).thenReturn(responseEmployee);
 
         //when
-        RequestEmployee savedEmployee = employeeService.createEmployee(requestEmployee);
+        ResponseEmployee savedEmployee = employeeService.createEmployee(requestEmployee);
 
         //then
         assertEquals(savedEmployee.getId(),employee.getId());
@@ -130,7 +133,7 @@ class EmployeeServiceTest {
         when(employeeRepository.save(employee)).thenReturn(null);
 
         //when
-        RequestEmployee savedEmployee = employeeService.createEmployee(requestEmployee);
+        ResponseEmployee savedEmployee = employeeService.createEmployee(requestEmployee);
         //then
         assertNull(savedEmployee);
     }
@@ -141,12 +144,14 @@ class EmployeeServiceTest {
         Employee employee = new Employee(1, "xiaoshiyi", 18, "Male", new BigDecimal(5000), 1);
         when(employeeRepository.save(employee)).thenReturn(employee);
         when(employeeRepository.findById(EMPLOYEE_ID)).thenReturn(Optional.of(employee));
+        ResponseEmployee responseEmployee = new ResponseEmployee();
         RequestEmployee requestEmployee = new RequestEmployee();
+        BeanUtils.copyProperties(employee,responseEmployee);
         BeanUtils.copyProperties(employee,requestEmployee);
-        when(dtoMapper.toResponseEmployee(employee)).thenReturn(requestEmployee);
+        when(dtoMapper.toResponseEmployee(employee)).thenReturn(responseEmployee);
 
         //when
-        RequestEmployee employeeUpdated = employeeService.updateEmployee(EMPLOYEE_ID, requestEmployee);
+        ResponseEmployee employeeUpdated = employeeService.updateEmployee(EMPLOYEE_ID, requestEmployee);
 
         //then
         assertEquals(employee.getId(),employeeUpdated.getId());

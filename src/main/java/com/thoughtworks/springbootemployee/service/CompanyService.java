@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.service;
 
+import com.thoughtworks.springbootemployee.dto.ResponseCompany;
 import com.thoughtworks.springbootemployee.exception.IllegalUpdateCompanyException;
 import com.thoughtworks.springbootemployee.exception.NoSuchCompanyException;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
@@ -25,16 +26,16 @@ public class CompanyService {
     private DTOMapper dtoMapper;
 
 
-    public List<RequestCompany> getCompanies() {
+    public List<ResponseCompany> getCompanies() {
         List<Company> companies = companyRepository.findAll();
         return dtoMapper.toResponseCompanies(companies);
     }
 
-    public Page<RequestCompany> getCompaniesPage(int page, int pageSize) {
+    public Page<ResponseCompany> getCompaniesPage(int page, int pageSize) {
         return dtoMapper.toResponseCompanyPage(companyRepository.findAll(PageRequest.of(page-1, pageSize)));
     }
 
-    public RequestCompany getCompany(int id) {
+    public ResponseCompany getCompany(int id) {
         return dtoMapper.toResponseCompany(companyRepository.findById(id).orElse(null));
     }
 
@@ -47,12 +48,12 @@ public class CompanyService {
         return company.getEmployees();
     }
 
-    public RequestCompany createCompany(RequestCompany requestCompany) {
+    public ResponseCompany createCompany(RequestCompany requestCompany) {
         Company company = dtoMapper.toCompany(requestCompany);
         return dtoMapper.toResponseCompany(companyRepository.save(company));
     }
 
-    public RequestCompany updateCompany(int companyId, RequestCompany requestCompany){
+    public ResponseCompany updateCompany(int companyId, RequestCompany requestCompany){
         if (companyId != requestCompany.getId()) {
             throw new IllegalUpdateCompanyException(ExceptionMessage.ILLEGAL_UPDATE_COMPANY.getErrorMsg());
         }

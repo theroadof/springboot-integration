@@ -1,6 +1,7 @@
 package com.thoughtworks.springbootemployee.controller;
 
 import com.thoughtworks.springbootemployee.dto.RequestCompany;
+import com.thoughtworks.springbootemployee.dto.ResponseCompany;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.service.CompanyService;
@@ -19,18 +20,18 @@ public class CompanyController {
     private CompanyService companyService;
 
     @GetMapping(params = {"page", "pageSize"})
-    public Page<RequestCompany> getCompaniesInPage(@RequestParam(value = "page") Integer page,
-                                            @RequestParam(value = "pageSize") Integer pageSize) {
+    public Page<ResponseCompany> getCompaniesInPage(@RequestParam(value = "page") Integer page,
+                                                    @RequestParam(value = "pageSize") Integer pageSize) {
         return companyService.getCompaniesPage(page, pageSize);
     }
 
     @GetMapping
-    public List<RequestCompany> getCompanies() {
+    public List<ResponseCompany> getCompanies() {
         return companyService.getCompanies();
     }
 
     @GetMapping("/{id}")
-    public RequestCompany getCompany(@PathVariable int id) {
+    public ResponseCompany getCompany(@PathVariable int id) {
         return companyService.getCompany(id);
     }
 
@@ -41,12 +42,12 @@ public class CompanyController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public RequestCompany addCompany(@RequestBody RequestCompany requestCompany) {
+    public ResponseCompany addCompany(@RequestBody RequestCompany requestCompany) {
         return companyService.createCompany(requestCompany);
     }
 
     @PutMapping("/{id}")
-    public RequestCompany updateCompany(@PathVariable("id") int id, @RequestBody RequestCompany requestCompany) {
+    public ResponseCompany updateCompany(@PathVariable("id") int id, @RequestBody RequestCompany requestCompany) {
         return companyService.updateCompany(id, requestCompany);
     }
 

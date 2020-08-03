@@ -1,5 +1,6 @@
 package com.thoughtworks.springbootemployee.service;
 
+import com.thoughtworks.springbootemployee.dto.ResponseCompany;
 import com.thoughtworks.springbootemployee.exception.IllegalUpdateCompanyException;
 import com.thoughtworks.springbootemployee.exception.NoSuchCompanyException;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
@@ -47,12 +48,12 @@ class CompanyServiceTest {
     void should_return_companies_when_getCompanies_given_() {
         //given
         List<Company> mockedCompanies = getMockCompanies();
-        List<RequestCompany> Rcompanies = singletonList(new RequestCompany(1, "Mm", 10, emptyList()));
+        List<ResponseCompany> responseCompanies = singletonList(new ResponseCompany(1, "Mm", 10, emptyList()));
         when(companyRepository.findAll()).thenReturn(mockedCompanies);
-        when(dtoMapper.toResponseCompanies(mockedCompanies)).thenReturn(Rcompanies);
+        when(dtoMapper.toResponseCompanies(mockedCompanies)).thenReturn(responseCompanies);
 
         //when
-        List<RequestCompany> companies = companyService.getCompanies();
+        List<ResponseCompany> companies = companyService.getCompanies();
 
         //then
         assertEquals(1, companies.size());
@@ -102,12 +103,13 @@ class CompanyServiceTest {
         //given
         Company mockedCompany = getMockCompany();
         RequestCompany requestCompany = new RequestCompany(1,"Mm",10,emptyList());
+        ResponseCompany responseCompany = new ResponseCompany(1,"Mm",10,emptyList());
         when(companyRepository.save(mockedCompany)).thenReturn(mockedCompany);
         when(dtoMapper.toCompany(requestCompany)).thenReturn(mockedCompany);
-        when(dtoMapper.toResponseCompany(mockedCompany)).thenReturn(requestCompany);
+        when(dtoMapper.toResponseCompany(mockedCompany)).thenReturn(responseCompany);
 
         //when
-        RequestCompany company = companyService.createCompany(requestCompany);
+        ResponseCompany company = companyService.createCompany(requestCompany);
 
         //then
         assertEquals(requestCompany.getId(),company.getId());
@@ -126,7 +128,7 @@ class CompanyServiceTest {
         //when
         RequestCompany requestCompany = new RequestCompany();
         BeanUtils.copyProperties(getMockCompany(),requestCompany);
-        RequestCompany companyUpdated = companyService.updateCompany(COMPANY_ID, requestCompany);
+        ResponseCompany companyUpdated = companyService.updateCompany(COMPANY_ID, requestCompany);
         //then
         verify(companyRepository).findById(COMPANY_ID);
         verify(companyRepository).save(isA(Company.class));
