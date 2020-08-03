@@ -4,7 +4,7 @@ import com.thoughtworks.springbootemployee.dto.ResponseEmployee;
 import com.thoughtworks.springbootemployee.exception.IllegalUpdateEmployeeException;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
 import com.thoughtworks.springbootemployee.dto.RequestEmployee;
-import com.thoughtworks.springbootemployee.mapper.DTOMapper;
+import com.thoughtworks.springbootemployee.mapper.EmployeeMapper;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
@@ -35,7 +35,7 @@ class EmployeeServiceTest {
     private static final int EMPLOYEE_ID = 1;
 
     @Mock
-    private DTOMapper dtoMapper;
+    private EmployeeMapper employeeMapper;
 
     @Mock
     private EmployeeRepository employeeRepository;
@@ -78,7 +78,7 @@ class EmployeeServiceTest {
         Page<ResponseEmployee> responseEmployeePage = new PageImpl<>(asList(new ResponseEmployee(1, "xx", 18, "Male", new BigDecimal(2), 1),
                 new ResponseEmployee(2, "xx", 19, "Male", new BigDecimal(2), 1)));
         when(employeeRepository.findAll(isA(PageRequest.class))).thenReturn(employeeswithPage);
-        when(dtoMapper.toResponseEmployeePage(employeeswithPage)).thenReturn(responseEmployeePage);
+        when(employeeMapper.toResponseEmployeePage(employeeswithPage)).thenReturn(responseEmployeePage);
 
         //when
         Page<ResponseEmployee> employees = employeeService.queryEmployeesByPage(1, 2);
@@ -92,7 +92,7 @@ class EmployeeServiceTest {
         //given
         Employee employee = new Employee(1, "xx", 18, "Male", new BigDecimal(2), 1);
         when(employeeRepository.findById(any())).thenReturn(Optional.of(employee));
-        when(dtoMapper.toResponseEmployee(employee)).thenReturn(new ResponseEmployee(1, "xx", 18, "Male", new BigDecimal(2), 1));
+        when(employeeMapper.toResponseEmployee(employee)).thenReturn(new ResponseEmployee(1, "xx", 18, "Male", new BigDecimal(2), 1));
 
         //when
         ResponseEmployee savedEmployee = employeeService.queryEmployee(EMPLOYEE_ID);
@@ -110,9 +110,9 @@ class EmployeeServiceTest {
         BeanUtils.copyProperties(employee,requestEmployee);
         BeanUtils.copyProperties(employee,responseEmployee);
         companyRepository.save(new Company(1,"oocl",0,emptyList()));
-        when(dtoMapper.toEmployee(requestEmployee)).thenReturn(employee);
+        when(employeeMapper.toEmployee(requestEmployee)).thenReturn(employee);
         when(employeeRepository.save(employee)).thenReturn(employee);
-        when(dtoMapper.toResponseEmployee(employee)).thenReturn(responseEmployee);
+        when(employeeMapper.toResponseEmployee(employee)).thenReturn(responseEmployee);
 
         //when
         ResponseEmployee savedEmployee = employeeService.createEmployee(requestEmployee);
@@ -129,7 +129,7 @@ class EmployeeServiceTest {
         Employee employee = new Employee(1, "tom chen", 18, "Male", new BigDecimal(9999), 1);
         BeanUtils.copyProperties(employee,requestEmployee);
         companyRepository.save(new Company(1,"oocl",0,emptyList()));
-        when(dtoMapper.toEmployee(requestEmployee)).thenReturn(employee);
+        when(employeeMapper.toEmployee(requestEmployee)).thenReturn(employee);
         when(employeeRepository.save(employee)).thenReturn(null);
 
         //when
@@ -148,7 +148,7 @@ class EmployeeServiceTest {
         RequestEmployee requestEmployee = new RequestEmployee();
         BeanUtils.copyProperties(employee,responseEmployee);
         BeanUtils.copyProperties(employee,requestEmployee);
-        when(dtoMapper.toResponseEmployee(employee)).thenReturn(responseEmployee);
+        when(employeeMapper.toResponseEmployee(employee)).thenReturn(responseEmployee);
 
         //when
         ResponseEmployee employeeUpdated = employeeService.updateEmployee(EMPLOYEE_ID, requestEmployee);

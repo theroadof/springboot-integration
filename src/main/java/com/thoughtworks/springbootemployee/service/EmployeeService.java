@@ -5,7 +5,7 @@ import com.thoughtworks.springbootemployee.exception.IllegalUpdateEmployeeExcept
 import com.thoughtworks.springbootemployee.exception.NoSuchEmployeeException;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
 import com.thoughtworks.springbootemployee.dto.RequestEmployee;
-import com.thoughtworks.springbootemployee.mapper.DTOMapper;
+import com.thoughtworks.springbootemployee.mapper.EmployeeMapper;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,27 +22,27 @@ public class EmployeeService {
     private EmployeeRepository employeeRepository;
 
     @Autowired
-    private DTOMapper dtoMapper;
+    private EmployeeMapper employeeMapper;
 
     public List<ResponseEmployee> queryEmployees() {
-        return dtoMapper.toResponseEmployees(employeeRepository.findAll());
+        return employeeMapper.toResponseEmployees(employeeRepository.findAll());
     }
 
     public List<ResponseEmployee> queryEmployeesByGender(String gender) {
-        return dtoMapper.toResponseEmployees(employeeRepository.findAllByGender(gender));
+        return employeeMapper.toResponseEmployees(employeeRepository.findAllByGender(gender));
     }
 
     public Page<ResponseEmployee> queryEmployeesByPage(int currentPage, int pageSize) {
-        return dtoMapper.toResponseEmployeePage(employeeRepository.findAll(PageRequest.of(currentPage-1, pageSize)));
+        return employeeMapper.toResponseEmployeePage(employeeRepository.findAll(PageRequest.of(currentPage-1, pageSize)));
     }
 
     public ResponseEmployee queryEmployee(int employeeId) {
-        return dtoMapper.toResponseEmployee(employeeRepository.findById(employeeId).orElse(null));
+        return employeeMapper.toResponseEmployee(employeeRepository.findById(employeeId).orElse(null));
     }
 
     public ResponseEmployee createEmployee(RequestEmployee requestEmployee) {
-        Employee employee = dtoMapper.toEmployee(requestEmployee);
-        return dtoMapper.toResponseEmployee(employeeRepository.save(employee));
+        Employee employee = employeeMapper.toEmployee(requestEmployee);
+        return employeeMapper.toResponseEmployee(employeeRepository.save(employee));
     }
 
     public ResponseEmployee updateEmployee(Integer id, RequestEmployee requestEmployee){
@@ -65,7 +65,7 @@ public class EmployeeService {
         if (requestEmployee.getSalary() != null) {
             employee.setSalary(requestEmployee.getSalary());
         }
-        return dtoMapper.toResponseEmployee(employeeRepository.save(employee));
+        return employeeMapper.toResponseEmployee(employeeRepository.save(employee));
     }
 
     public void deleteEmployee(int employeeId){

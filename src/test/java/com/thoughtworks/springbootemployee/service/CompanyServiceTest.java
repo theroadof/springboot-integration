@@ -5,7 +5,7 @@ import com.thoughtworks.springbootemployee.exception.IllegalUpdateCompanyExcepti
 import com.thoughtworks.springbootemployee.exception.NoSuchCompanyException;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
 import com.thoughtworks.springbootemployee.dto.RequestCompany;
-import com.thoughtworks.springbootemployee.mapper.DTOMapper;
+import com.thoughtworks.springbootemployee.mapper.CompanyMapper;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
@@ -18,13 +18,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,7 +39,7 @@ class CompanyServiceTest {
     @Mock
     CompanyRepository companyRepository;
     @Mock
-    private DTOMapper dtoMapper;
+    private CompanyMapper companyMapper;
 
     @Test
     void should_return_companies_when_getCompanies_given_() {
@@ -50,7 +47,7 @@ class CompanyServiceTest {
         List<Company> mockedCompanies = getMockCompanies();
         List<ResponseCompany> responseCompanies = singletonList(new ResponseCompany(1, "Mm", 10, emptyList()));
         when(companyRepository.findAll()).thenReturn(mockedCompanies);
-        when(dtoMapper.toResponseCompanies(mockedCompanies)).thenReturn(responseCompanies);
+        when(companyMapper.toResponseCompanies(mockedCompanies)).thenReturn(responseCompanies);
 
         //when
         List<ResponseCompany> companies = companyService.getCompanies();
@@ -89,7 +86,6 @@ class CompanyServiceTest {
     @Test
     void should_return_Employees_when_getEmployees_given_company_id() {
         //given
-        DTOMapper dtoMapper = new DTOMapper();
         when(companyRepository.findById(eq(COMPANY_ID))).thenReturn(Optional.of(getMockCompany()));
 
         //when
@@ -105,8 +101,8 @@ class CompanyServiceTest {
         RequestCompany requestCompany = new RequestCompany(1,"Mm",10,emptyList());
         ResponseCompany responseCompany = new ResponseCompany(1,"Mm",10,emptyList());
         when(companyRepository.save(mockedCompany)).thenReturn(mockedCompany);
-        when(dtoMapper.toCompany(requestCompany)).thenReturn(mockedCompany);
-        when(dtoMapper.toResponseCompany(mockedCompany)).thenReturn(responseCompany);
+        when(companyMapper.toCompany(requestCompany)).thenReturn(mockedCompany);
+        when(companyMapper.toResponseCompany(mockedCompany)).thenReturn(responseCompany);
 
         //when
         ResponseCompany company = companyService.createCompany(requestCompany);

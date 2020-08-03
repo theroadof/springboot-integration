@@ -5,7 +5,7 @@ import com.thoughtworks.springbootemployee.exception.IllegalUpdateCompanyExcepti
 import com.thoughtworks.springbootemployee.exception.NoSuchCompanyException;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
 import com.thoughtworks.springbootemployee.dto.RequestCompany;
-import com.thoughtworks.springbootemployee.mapper.DTOMapper;
+import com.thoughtworks.springbootemployee.mapper.CompanyMapper;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
@@ -23,20 +23,20 @@ public class CompanyService {
     private CompanyRepository companyRepository;
 
     @Autowired
-    private DTOMapper dtoMapper;
+    private CompanyMapper companyMapper;
 
 
     public List<ResponseCompany> getCompanies() {
         List<Company> companies = companyRepository.findAll();
-        return dtoMapper.toResponseCompanies(companies);
+        return companyMapper.toResponseCompanies(companies);
     }
 
     public Page<ResponseCompany> getCompaniesPage(int page, int pageSize) {
-        return dtoMapper.toResponseCompanyPage(companyRepository.findAll(PageRequest.of(page-1, pageSize)));
+        return companyMapper.toResponseCompanyPage(companyRepository.findAll(PageRequest.of(page-1, pageSize)));
     }
 
     public ResponseCompany getCompany(int id) {
-        return dtoMapper.toResponseCompany(companyRepository.findById(id).orElse(null));
+        return companyMapper.toResponseCompany(companyRepository.findById(id).orElse(null));
     }
 
 
@@ -49,8 +49,8 @@ public class CompanyService {
     }
 
     public ResponseCompany createCompany(RequestCompany requestCompany) {
-        Company company = dtoMapper.toCompany(requestCompany);
-        return dtoMapper.toResponseCompany(companyRepository.save(company));
+        Company company = companyMapper.toCompany(requestCompany);
+        return companyMapper.toResponseCompany(companyRepository.save(company));
     }
 
     public ResponseCompany updateCompany(int companyId, RequestCompany requestCompany){
@@ -75,7 +75,7 @@ public class CompanyService {
             company.setEmployees(requestCompany.getEmployees());
         }
 
-        return dtoMapper.toResponseCompany(companyRepository.save(company));
+        return companyMapper.toResponseCompany(companyRepository.save(company));
     }
 
     public void deleteCompany(int companyId){
