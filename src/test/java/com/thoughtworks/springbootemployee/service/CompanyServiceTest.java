@@ -1,7 +1,7 @@
 package com.thoughtworks.springbootemployee.service;
 
-import com.thoughtworks.springbootemployee.Exception.IllegalUpdateCompanyException;
-import com.thoughtworks.springbootemployee.Exception.NoSuchCompanyException;
+import com.thoughtworks.springbootemployee.exception.IllegalUpdateCompanyException;
+import com.thoughtworks.springbootemployee.exception.NoSuchCompanyException;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
 import com.thoughtworks.springbootemployee.dto.RequestCompany;
 import com.thoughtworks.springbootemployee.mapper.DTOMapper;
@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -24,12 +23,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class CompanyServiceTest {
@@ -46,14 +46,16 @@ class CompanyServiceTest {
     @Test
     void should_return_companies_when_getCompanies_given_() {
         //given
-        when(companyRepository.findAll()).thenReturn(getMockCompanies());
-//        when(dtoMapper.toResponseCompanies(any())).thenReturn(dtoMapper.toResponseCompanies(getMockCompanies()));
+        List<Company> mockedCompanies = getMockCompanies();
+        List<RequestCompany> Rcompanies = singletonList(new RequestCompany(1, "Mm", 10, emptyList()));
+        when(companyRepository.findAll()).thenReturn(mockedCompanies);
+        when(dtoMapper.toResponseCompanies(mockedCompanies)).thenReturn(Rcompanies);
 
         //when
         List<RequestCompany> companies = companyService.getCompanies();
 
         //then
-        assertEquals(10, companies.size());
+        assertEquals(1, companies.size());
 
     }
 
@@ -92,16 +94,17 @@ class CompanyServiceTest {
         //when
         List<Employee> employees = companyService.getEmployees(COMPANY_ID);
         //then
-        assertEquals(10, employees.size());
+        assertEquals(0, employees.size());
     }
 
     @Test
-    void should_return_employee_when_create_company_given_company() {
+    void should_return_company_when_create_company_given_company() {
         //given
-        RequestCompany requestCompany = new RequestCompany();
-        BeanUtils.copyProperties(getMockCompany(),requestCompany);
-        when(dtoMapper.toCompany(requestCompany)).thenReturn(getMockCompany());
-        when(companyRepository.save(getMockCompany())).thenReturn(getMockCompany());
+        Company mockedCompany = getMockCompany();
+        RequestCompany requestCompany = new RequestCompany(1,"Mm",10,emptyList());
+        when(companyRepository.save(mockedCompany)).thenReturn(mockedCompany);
+        when(dtoMapper.toCompany(requestCompany)).thenReturn(mockedCompany);
+        when(dtoMapper.toResponseCompany(mockedCompany)).thenReturn(requestCompany);
 
         //when
         RequestCompany company = companyService.createCompany(requestCompany);
@@ -112,6 +115,7 @@ class CompanyServiceTest {
         assertEquals(requestCompany.getEmployeeNumber(),company.getEmployeeNumber());
         assertEquals(requestCompany.getEmployees(),company.getEmployees());
     }
+
 
     @Test
     void should_return_company_when_updateCompany_given_exists_company() throws Exception {
@@ -178,43 +182,12 @@ class CompanyServiceTest {
     }
 
     private List<Company> getMockCompanies() {
-        List<Employee> employees = new ArrayList<>();
-        employees.add(new Employee(1, "xiaoyi", 18, "Male", new BigDecimal(3000), 1));
-        employees.add(new Employee(2, "xiaoer", 18, "Male", new BigDecimal(3000), 1));
-        employees.add(new Employee(3, "xiaosan", 19, "Male", new BigDecimal(3000), 1));
-        employees.add(new Employee(4, "xiaosi", 19, "Male", new BigDecimal(3000), 1));
-        employees.add(new Employee(5, "xiaowu", 20, "Male", new BigDecimal(3000), 1));
-        employees.add(new Employee(6, "xiaoliu", 20, "Female", new BigDecimal(3000), 1));
-        employees.add(new Employee(7, "xiaoqi", 21, "Female", new BigDecimal(3000), 1));
-        employees.add(new Employee(8, "xiaoba", 21, "Female", new BigDecimal(3000), 1));
-        employees.add(new Employee(9, "xiaojiu", 18, "Male", new BigDecimal(3000), 1));
-        employees.add(new Employee(10, "xiaoshi", 18, "Male", new BigDecimal(3000), 1));
         List<Company> companies = new ArrayList<>();
-        companies.add(new Company(1, "Mm", 10, employees));
-        companies.add(new Company(2, "Aa", 10, employees));
-        companies.add(new Company(3, "Bb", 10, employees));
-        companies.add(new Company(4, "Cc", 10, employees));
-        companies.add(new Company(5, "Dd", 10, employees));
-        companies.add(new Company(6, "Ff", 10, employees));
-        companies.add(new Company(7, "Gg", 10, employees));
-        companies.add(new Company(8, "Ll", 10, employees));
-        companies.add(new Company(9, "Pp", 10, employees));
-        companies.add(new Company(10, "Uu", 10, employees));
+        companies.add(new Company(1, "Mm", 10, emptyList()));
         return companies;
     }
 
     private Company getMockCompany() {
-        List<Employee> employees = new ArrayList<>();
-        employees.add(new Employee(1, "xiaoyi", 18, "Male", new BigDecimal(3000), 1));
-        employees.add(new Employee(2, "xiaoer", 18, "Male", new BigDecimal(3000), 1));
-        employees.add(new Employee(3, "xiaosan", 19, "Male", new BigDecimal(3000), 1));
-        employees.add(new Employee(4, "xiaosi", 19, "Male", new BigDecimal(3000), 1));
-        employees.add(new Employee(5, "xiaowu", 20, "Male", new BigDecimal(3000), 1));
-        employees.add(new Employee(6, "xiaoliu", 20, "Female", new BigDecimal(3000), 1));
-        employees.add(new Employee(7, "xiaoqi", 21, "Female", new BigDecimal(3000), 1));
-        employees.add(new Employee(8, "xiaoba", 21, "Female", new BigDecimal(3000), 1));
-        employees.add(new Employee(9, "xiaojiu", 18, "Male", new BigDecimal(3000), 1));
-        employees.add(new Employee(10, "xiaoshi", 18, "Male", new BigDecimal(3000), 1));
-        return new Company(1, "Mm", 10, employees);
+        return new Company(1, "Mm", 10, emptyList());
     }
 }

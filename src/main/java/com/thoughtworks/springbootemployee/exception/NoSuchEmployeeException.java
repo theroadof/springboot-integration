@@ -1,4 +1,4 @@
-package com.thoughtworks.springbootemployee.Exception;
+package com.thoughtworks.springbootemployee.exception;
 
 public class NoSuchEmployeeException extends RuntimeException {
     public NoSuchEmployeeException(String message) {

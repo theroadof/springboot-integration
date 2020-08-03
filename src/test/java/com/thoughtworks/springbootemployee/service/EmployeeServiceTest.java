@@ -1,8 +1,7 @@
 package com.thoughtworks.springbootemployee.service;
 
-import com.thoughtworks.springbootemployee.Exception.IllegalUpdateEmployeeException;
+import com.thoughtworks.springbootemployee.exception.IllegalUpdateEmployeeException;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
-import com.thoughtworks.springbootemployee.dto.RequestCompany;
 import com.thoughtworks.springbootemployee.dto.RequestEmployee;
 import com.thoughtworks.springbootemployee.mapper.DTOMapper;
 import com.thoughtworks.springbootemployee.model.Company;
@@ -20,7 +19,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 

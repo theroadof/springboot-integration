@@ -1,6 +1,6 @@
 package com.thoughtworks.springbootemployee.config;
 
-import com.thoughtworks.springbootemployee.Exception.*;
+import com.thoughtworks.springbootemployee.exception.*;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

@@ -1,7 +1,7 @@
 package com.thoughtworks.springbootemployee.service;
 
-import com.thoughtworks.springbootemployee.Exception.IllegalUpdateEmployeeException;
-import com.thoughtworks.springbootemployee.Exception.NoSuchEmployeeException;
+import com.thoughtworks.springbootemployee.exception.IllegalUpdateEmployeeException;
+import com.thoughtworks.springbootemployee.exception.NoSuchEmployeeException;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
 import com.thoughtworks.springbootemployee.dto.RequestEmployee;
 import com.thoughtworks.springbootemployee.mapper.DTOMapper;

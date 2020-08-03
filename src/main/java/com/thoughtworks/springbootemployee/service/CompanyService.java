@@ -1,7 +1,7 @@
 package com.thoughtworks.springbootemployee.service;
 
-import com.thoughtworks.springbootemployee.Exception.IllegalUpdateCompanyException;
-import com.thoughtworks.springbootemployee.Exception.NoSuchCompanyException;
+import com.thoughtworks.springbootemployee.exception.IllegalUpdateCompanyException;
+import com.thoughtworks.springbootemployee.exception.NoSuchCompanyException;
 import com.thoughtworks.springbootemployee.constant.ExceptionMessage;
 import com.thoughtworks.springbootemployee.dto.RequestCompany;
 import com.thoughtworks.springbootemployee.mapper.DTOMapper;
@@ -26,7 +26,8 @@ public class CompanyService {
 
 
     public List<RequestCompany> getCompanies() {
-        return dtoMapper.toResponseCompanies(companyRepository.findAll());
+        List<Company> companies = companyRepository.findAll();
+        return dtoMapper.toResponseCompanies(companies);
     }
 
     public Page<RequestCompany> getCompaniesPage(int page, int pageSize) {
